@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help Bring Sunday Home</title>
+<meta name="description" content="Sunday is missing in Overland Park, Kansas. See her route, where we've searched, and how you can help. If you see her, don't chase her. Call 913-530-7596.">
+<link rel="canonical" href="https://www.bringsundayhome.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.bringsundayhome.com/">
+<meta property="og:title" content="Help Bring Sunday Home">
+<meta property="og:description" content="Sunday is missing in Overland Park, Kansas. See her route, where we've searched, and how you can help. If you see her, don't chase her. Call 913-530-7596.">
+<meta property="og:image" content="https://www.bringsundayhome.com/sunday-photos/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Three photos of Sunday, a black dog with a graying muzzle. Have you seen Sunday? Call 913-530-7596.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Help Bring Sunday Home">
+<meta name="twitter:description" content="Sunday is missing in Overland Park, Kansas. See her route, where we've searched, and how you can help. If you see her, don't chase her. Call 913-530-7596.">
+<meta name="twitter:image" content="https://www.bringsundayhome.com/sunday-photos/share.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --surface: #ffffff;
+    --ink: #22201c;
+    --muted: #6b665e;
+    --hair: #e7e2da;
+    --sunday: #d4622a;
+    --sunday-soft: #fbe9df;
+    --team: #34679e;
+    --team-soft: #e3edf7;
+    --unseen: #9a948b;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(34,32,28,.06), 0 8px 24px rgba(34,32,28,.08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 16px/1.55 Figtree, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 16px 56px; }
+
+  /* Search banner */
+  .banner { display: flex; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--hair); border-left: 4px solid var(--sunday); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 24px; }
+  .banner img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex: none; }
+  .banner strong { display: block; font-size: 17px; }
+  .banner p { margin: 2px 0 0; color: var(--muted); }
+  .placeholder { background: #fff3c4; color: #6b5200; padding: 0 4px; border-radius: 4px; font-weight: 600; }
+
+  header h1 { font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -.01em; }
+  header p { margin: 0 0 20px; color: var(--muted); max-width: 640px; }
+
+  /* Map stage */
+  .stage { position: relative; height: min(76vh, 660px); min-height: 520px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--hair); background: #eceae6; box-shadow: var(--shadow); }
+  .map-el { position: absolute; inset: 0; }
+  .card { position: absolute; left: 16px; top: 16px; bottom: 16px; width: 360px; display: flex; flex-direction: column; background: var(--surface); border-radius: 12px; box-shadow: var(--shadow); z-index: 2; }
+  .card-body { padding: 20px 22px 8px; overflow-y: auto; flex: 1; }
+  .progress { display: flex; gap: 4px; padding: 16px 22px 0; }
+  .progress button { flex: 1; height: 6px; border: 0; border-radius: 3px; background: var(--hair); cursor: pointer; padding: 0; }
+  .progress button.done { background: #ecb393; }
+  .progress button.on { background: var(--sunday); }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--sunday); margin: 0 0 4px; }
+  .card h2 { font-size: 22px; line-height: 1.25; margin: 0 0 10px; }
+  .card p { margin: 0 0 12px; }
+  .seen-note { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .seen-note svg { flex: none; }
+  .more-btn { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 12px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--hair); background: var(--bg); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+  .more-btn:hover { border-color: #cfc8bd; background: #f3f0eb; }
+  .callout { background: var(--sunday-soft); border-radius: 10px; padding: 12px 14px; font-size: 15px; margin: 4px 0 12px; }
+  .callout strong { display: block; }
+  .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--hair); }
+  .count { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .btn { font: inherit; font-weight: 600; border-radius: 10px; padding: 10px 16px; cursor: pointer; border: 1px solid var(--hair); background: var(--surface); color: var(--ink); min-width: 92px; }
+  .btn:disabled { opacity: .4; cursor: default; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn:focus-visible, .more-btn:focus-visible, .progress button:focus-visible, .fit-btn:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
+
+  .fit-btn { position: absolute; right: 52px; top: 10px; z-index: 2; font: inherit; font-size: 14px; font-weight: 600; background: var(--surface); border: 1px solid var(--hair); border-radius: 8px; padding: 7px 12px; cursor: pointer; box-shadow: var(--shadow); }
+
+  /* Legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 14px 2px 0; font-size: 14px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+
+  /* Map markers */
+  .mk { position: relative; width: 0; height: 0; }
+  .mk .dot { position: absolute; transform: translate(-50%, -50%); border-radius: 50%; }
+  .mk .lbl { position: absolute; white-space: nowrap; font-size: 12.5px; font-weight: 600; line-height: 1; padding: 5px 8px; border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 1px 3px rgba(0,0,0,.14); color: var(--ink); }
+  .mk.place .dot { width: 10px; height: 10px; background: #fff; border: 2px solid #8a847a; }
+  .mk.place .lbl { font-weight: 500; color: #4a463f; }
+  .mk.pawz .dot { width: 16px; height: 16px; background: var(--ink); border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+  .mk.pawz .lbl { background: var(--ink); color: #fff; }
+  .mk.sunday .dot { width: 22px; height: 22px; background: var(--sunday); border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3); transition: background .3s; }
+  .mk.sunday .lbl { color: var(--sunday); }
+  .mk.sunday.unseen .dot { background: var(--unseen); }
+  .mk.sunday.unseen .lbl { color: var(--muted); }
+  .mk.team .dot { width: 14px; height: 14px; background: var(--team); border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+  .mk.team .lbl { background: var(--team); color: #fff; }
+  .mk.event .dot { width: 14px; height: 14px; background: #fff; border: 3px solid var(--ink); }
+  .mk.last .dot { width: 18px; height: 18px; background: var(--sunday); border: 3px solid #fff; }
+  .mk.last .ring { position: absolute; width: 18px; height: 18px; transform: translate(-50%, -50%); border-radius: 50%; border: 2px solid var(--sunday); animation: ring 2.4s ease-out infinite; }
+  .mk.last .lbl { background: var(--sunday); color: #fff; }
+  @keyframes ring { from { width: 18px; height: 18px; opacity: .9; } to { width: 70px; height: 70px; opacity: 0; } }
+  .pos-r .lbl { left: 14px; top: -11px; }
+  .pos-l .lbl { right: 14px; top: -11px; }
+  .pos-t .lbl { left: 0; bottom: 14px; transform: translateX(-50%); }
+  .pos-b .lbl { left: 0; top: 14px; transform: translateX(-50%); }
+  .mk.hidden { display: none; }
+
+  /* Text timeline */
+  details.text-timeline { margin-top: 28px; background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); padding: 4px 20px; }
+  details.text-timeline summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
+  details.text-timeline ol { padding-left: 20px; margin: 4px 0 16px; }
+  details.text-timeline li { margin-bottom: 12px; }
+  details.text-timeline li b { display: block; }
+
+  /* How-this-happened dialog */
+  dialog { width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; border: 0; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.25); color: var(--ink); }
+  dialog::backdrop { background: rgba(34,32,28,.45); }
+  .dlg-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; padding: 20px 22px 6px; }
+  .dlg-head h2 { margin: 0; font-size: 22px; }
+  .dlg-close { border: 0; background: var(--bg); width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; flex: none; color: var(--ink); }
+  .dlg-intro { padding: 0 22px; color: var(--muted); margin: 0 0 12px; }
+  .plan { margin: 0 22px; background: var(--bg); border: 1px solid var(--hair); border-radius: 12px; padding: 10px; }
+  .plan svg { display: block; width: 100%; height: auto; max-height: 320px; margin: 0 auto; }
+  .plan .fp-move { transition: transform .9s cubic-bezier(.45,0,.2,1), opacity .5s; }
+  .plan .fade { transition: opacity .5s; }
+  .plan-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; color: var(--muted); padding: 6px 4px 0; }
+  .plan-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .plan-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dlg-step { padding: 14px 22px 4px; min-height: 170px; }
+  .dlg-step p { margin: 0 0 10px; }
+  .dlg-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 22px 20px; }
+
+  /* Jump links */
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 20px; }
+  .jump a { font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; background: var(--surface); border: 1px solid var(--hair); border-radius: 999px; padding: 6px 12px; }
+  .jump a:hover { border-color: #cfc8bd; }
+
+  /* Search section */
+  .section-search { margin-top: 56px; scroll-margin-top: 16px; }
+  .section-search .sec { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
+  .section-search .lede { margin: 0 0 20px; color: var(--muted); max-width: 680px; }
+  .updated { display: inline-block; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--hair); border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }
+  .card ul { margin: 0 0 12px; padding-left: 18px; }
+  .card li { margin-bottom: 6px; }
+  .card .sub { font-weight: 600; margin: 4px 0 6px; }
+  .area-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+  .area-legend button { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--hair); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .area-legend button:hover { border-color: #cfc8bd; }
+  .area-legend button[aria-current="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .area-legend button:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
+  .sw { width: 18px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+  .mk.tag .lbl { font-weight: 700; }
+  .mk.home .dot { width: 16px; height: 16px; background: #fff; border: 4px solid var(--sunday); box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+  .mk.home .lbl { color: var(--sunday); }
+  .mk.tag.red .lbl { background: #cf3440; color: #fff; }
+
+  /* This is Sunday (photos) */
+  .meet { display: grid; grid-template-columns: minmax(220px, 1fr) 2fr; gap: 24px; align-items: center; margin-bottom: 36px; }
+  .meet h2 { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
+  .meet p { margin: 0; color: var(--muted); }
+  .gallery { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 10px; }
+  .gallery button { position: relative; padding: 0; border: 0; border-radius: 12px; overflow: hidden; cursor: zoom-in; aspect-ratio: 1; background: #ddd; }
+  .gallery .badge { position: absolute; left: 6px; bottom: 6px; font-size: 11px; font-weight: 600; color: #fff; background: rgba(0,0,0,.55); padding: 2px 7px; border-radius: 999px; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+  .gallery button:hover img { transform: scale(1.04); }
+  .gallery button:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
+  .photo-dlg { width: min(860px, calc(100vw - 32px)); background: #1b1a18; color: #fff; }
+  .photo-dlg img { display: block; width: 100%; max-height: calc(100vh - 150px); object-fit: contain; }
+  .photo-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; }
+  .photo-bar .count { color: #c9c4bc; }
+  .photo-bar .btn { background: #2c2a27; color: #fff; border-color: #3a3833; }
+  .photo-dlg .dlg-close { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,.55); color: #fff; }
+
+  /* What happens next */
+  .next { margin-top: 56px; scroll-margin-top: 16px; }
+  .next .sec { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
+  .next-list { list-style: none; padding: 0; margin: 16px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .next-list li { display: flex; gap: 14px; background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); padding: 18px; }
+  .next-list .n { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--sunday-soft); color: var(--sunday); font-weight: 700; display: grid; place-items: center; }
+  .next-list h3 { font-size: 18px; line-height: 1.3; margin: 0 0 6px; }
+  .next-list p { margin: 0; }
+  .next-list .when { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--sunday); margin-bottom: 4px; }
+  .next-cta { margin-top: 16px; background: var(--sunday-soft); border-radius: var(--radius); padding: 16px 18px; font-size: 17px; }
+  .next-cta strong { display: block; }
+
+  .banner a, .callout a, .next-cta a { color: var(--sunday); font-weight: 700; text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+  body.has-call .wrap { padding-bottom: 110px; }
+
+  /* Persistent call button */
+  .call-fab { position: fixed; right: 20px; bottom: 20px; z-index: 40; display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 999px; background: var(--sunday); color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; box-shadow: 0 6px 20px rgba(212,98,42,.35), 0 2px 6px rgba(0,0,0,.15); }
+  .call-fab:hover { background: #bf5623; }
+  .call-fab:focus-visible { outline: 3px solid #f0b48f; outline-offset: 3px; }
+  .call-fab .num { font-weight: 500; opacity: .9; padding-left: 10px; border-left: 1px solid rgba(255,255,255,.4); }
+  .call-fab .placeholder { color: #6b5200; }
+
+  @media (max-width: 760px) {
+    .stage { height: auto; min-height: 0; overflow: visible; border: 0; background: none; box-shadow: none; }
+    .map-el { position: relative; height: 56vh; min-height: 340px; border-radius: var(--radius); border: 1px solid var(--hair); overflow: hidden; }
+    .card { position: static; width: auto; margin-top: 12px; box-shadow: none; border: 1px solid var(--hair); }
+    .card-body { overflow: visible; }
+    .card h2 { font-size: 20px; }
+    .dlg-step { min-height: 0; }
+    .card-foot { order: -1; border-top: 0; border-bottom: 1px solid var(--hair); padding: 12px 16px; }
+    .progress { order: -2; padding-bottom: 4px; }
+    body.has-call { padding-bottom: 84px; }
+    .call-fab { left: 12px; right: 12px; bottom: 12px; justify-content: center; }
+    .call-fab .num { display: none; }
+    .next-list { grid-template-columns: 1fr; }
+    .meet { grid-template-columns: 1fr; gap: 14px; }
+    .gallery { gap: 6px; grid-template-columns: repeat(2, 1fr); }
+    .dlg-foot { position: sticky; bottom: 0; background: #fff; border-top: 1px solid var(--hair); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mk.last .ring { animation: none; opacity: 0; }
+    .plan .fp-move, .plan .fade { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="banner" id="banner" hidden></div>
+
+  <section class="meet" aria-labelledby="meetTitle">
+    <div>
+      <h2 id="meetTitle">This is Sunday</h2>
+      <p>Sunday has a black coat, a graying muzzle and brown eyes. Tap a photo to see it larger.</p>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <header>
+    <h1>Sunday's path on Friday morning, October 9</h1>
+    <p>This map follows what we know about Sunday's route after she left Pawz at Play. Tap <b>Next</b> to step through it.</p>
+  </header>
+  <nav class="jump" aria-label="On this page">
+    <a href="#search">Where the search stands &darr;</a>
+    <a href="#next">What happens next &darr;</a>
+  </nav>
+
+  <section class="stage" aria-label="Interactive map of Sunday's route">
+    <div id="map" class="map-el" role="img" aria-label="Map of the area around College Boulevard and Mastin Street, Overland Park, Kansas, showing Sunday's route. The same information is in the text timeline below the map."></div>
+    <button class="fit-btn" id="fitBtn" type="button">Show whole area</button>
+    <article class="card" aria-live="polite">
+      <div class="progress" id="progress" role="group" aria-label="Choose a step"></div>
+      <div class="card-body" id="cardBody"></div>
+      <div class="card-foot">
+        <button class="btn" id="prevBtn" type="button">Back</button>
+        <span class="count" id="count"></span>
+        <button class="btn primary" id="nextBtn" type="button">Next</button>
+      </div>
+    </article>
+  </section>
+
+  <div class="legend" aria-hidden="true">
+    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#d4622a" stroke-width="5" stroke-linecap="round"/></svg>Seen by our team or a witness</span>
+    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#d4622a" stroke-width="4" stroke-dasharray="5 5" stroke-linecap="round" opacity=".75"/></svg>Most likely path, not seen</span>
+    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#34679e" stroke-width="3" stroke-dasharray="1 5" stroke-linecap="round"/></svg>Pawz at Play team</span>
+  </div>
+
+  <details class="text-timeline">
+    <summary>Read the full timeline as text</summary>
+    <ol id="textTimeline"></ol>
+  </details>
+
+  <section class="section-search" id="search" aria-labelledby="searchTitle">
+    <span class="updated" id="updatedTag"></span>
+    <h2 class="sec" id="searchTitle">Where the search stands</h2>
+    <p class="lede">Shaded areas have already been searched, but that doesn't mean Sunday isn't there. It just means people have been looking in those areas. The area outlined in red has not been searched yet, and that's where we need the most help.</p>
+
+    <div class="stage">
+      <div id="searchMap" class="map-el" role="img" aria-label="Map of Indian Creek and the surrounding neighborhoods in Overland Park, Kansas, showing which areas have been searched for Sunday. The same information is in the text summary below the map."></div>
+      <button class="fit-btn" id="sFit" type="button">Show whole area</button>
+      <article class="card" aria-live="polite">
+        <div class="progress" id="sProgress" role="group" aria-label="Choose a search area"></div>
+        <div class="card-body" id="sBody"></div>
+        <div class="card-foot">
+          <button class="btn" id="sPrev" type="button">Back</button>
+          <span class="count" id="sCount"></span>
+          <button class="btn primary" id="sNext" type="button">Next</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="area-legend" id="areaLegend" role="group" aria-label="Map key: jump to an area"></div>
+
+    <details class="text-timeline">
+      <summary>Read the search summary as text</summary>
+      <div id="searchText"></div>
+    </details>
+  </section>
+
+  <section class="next" id="next" aria-labelledby="nextTitle">
+    <h2 class="sec" id="nextTitle">What happens next</h2>
+    <ol class="next-list">
+      <li>
+        <span class="n" aria-hidden="true">1</span>
+        <div>
+          <p class="when">Shannon Valley neighbors</p>
+          <h3>Please check your yard</h3>
+          <p>We're asking everyone in the Shannon Valley neighborhood to check their backyards and side yards, and under porches and decks.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n" aria-hidden="true">2</span>
+        <div>
+          <p class="when">Monday, October 12</p>
+          <h3>A new team of scent tracking dogs arrives</h3>
+          <p>Several scent tracking dogs will join the search for Sunday.</p>
+        </div>
+      </li>
+      <li>
+        <span class="n" aria-hidden="true">3</span>
+        <div>
+          <p class="when">Every day</p>
+          <h3>We won't stop looking</h3>
+          <p>We will keep searching for Sunday until she is found.</p>
+        </div>
+      </li>
+    </ol>
+    <div class="next-cta" id="nextCta" hidden></div>
+  </section>
+</div>
+
+<a class="call-fab" id="callFab" hidden>
+  <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
+  <span>Call to report a sighting</span>
+  <span class="num" id="callNum"></span>
+</a>
+
+<dialog id="photoDialog" class="photo-dlg" aria-label="Picture of Sunday">
+  <button class="dlg-close" type="button" aria-label="Close" data-close>&times;</button>
+  <img id="photoBig" alt="">
+  <div class="photo-bar">
+    <button class="btn" id="photoPrev" type="button">Back</button>
+    <span class="count" id="photoCount"></span>
+    <button class="btn" id="photoNext" type="button">Next</button>
+  </div>
+</dialog>
+
+<dialog id="howDialog" aria-labelledby="howTitle">
+  <div class="dlg-head">
+    <h2 id="howTitle">How Sunday got out</h2>
+    <button class="dlg-close" type="button" aria-label="Close" data-close>&times;</button>
+  </div>
+  <p class="dlg-intro">Sunday has been part of the Pawz at Play family for 10 years. When she boards with us, she sleeps in Big Pawz with her dog friends and our overnight staff member. Our team is on site 24 hours a day, 7 days a week, 365 days a year, and our Overnighters sleep in the rooms with the boarding dogs every night.</p>
+
+  <div class="plan">
+    <svg viewBox="0 0 488 264" role="img" aria-labelledby="planDesc">
+      <desc id="planDesc">Simplified floor plan of Pawz at Play. Big Pawz, where Sunday sleeps, is on the right, with a small gated area in its top corner. A rear corridor runs along the back of the building. The lobby and front desk are on the left, separated from the front hallway by an interior wall with two open doorways. The front door opens into that hallway. Not to scale.</desc>
+      <!-- room fills -->
+      <rect x="339" y="46" width="133" height="186" fill="#f6efe7"/>
+      <rect x="339" y="46" width="39" height="56" fill="#fff"/>
+      <rect x="39" y="92" width="133" height="15" rx="2" fill="#e7e2da" stroke="#b9b2a7" stroke-width="1.2"/>
+      <!-- walls -->
+      <g stroke="#8a847a" stroke-width="2.5" fill="none" stroke-linecap="square">
+        <path d="M16 10 H472 V232 H261 M236 232 H16 V10"/>
+        <path d="M16 46 H217 M242 46 H347 M371 46 H472"/>
+        <path d="M194 46 V86 M194 107 V169 M194 204 V232"/>
+        <path d="M261 46 V113 M261 127 V151 H339 M261 102 H339 M295 102 V151"/>
+        <path d="M339 183 H288 V195 M288 220 V232"/>
+      </g>
+      <path d="M339 46 V232" stroke="#4a463f" stroke-width="3.5"/>
+      <!-- gated area (gate lines) -->
+      <path d="M378 46 V102 H339" stroke="#b9b2a7" stroke-width="2" stroke-dasharray="3 3" fill="none"/>
+      <!-- gate to corridor -->
+      <path d="M217 46 H242" stroke="#b9b2a7" stroke-width="2" stroke-dasharray="3 3"/>
+      <!-- labels -->
+      <g font-family="Figtree, sans-serif" text-anchor="middle" fill="#6b665e">
+        <text x="96" y="32" font-size="10" letter-spacing="1.5" fill="#9a948b">REAR CORRIDOR</text>
+        <text x="105" y="103.5" font-size="10" font-weight="600" fill="#4a463f">Front desk</text>
+        <text x="100" y="175" font-size="12" letter-spacing="2" fill="#9a948b">LOBBY</text>
+        <text x="362" y="114" font-size="8.5">Gated area</text>
+        <text x="410" y="150" font-size="12" font-weight="700" fill="#4a463f">Big Pawz</text>
+        <text x="410" y="164" font-size="8.5">Sunday's overnight room</text>
+        <text x="278" y="124" font-size="7.5">Dog</text>
+        <text x="278" y="133" font-size="7.5">belongings</text>
+        <text x="317" y="130" font-size="7.5">Bathroom</text>
+        <text x="313" y="212" font-size="9">Office</text>
+        <text x="229" y="58" font-size="7.5" fill="#9a948b">Gate</text>
+        <text x="236" y="256" font-size="10" font-weight="600" fill="#4a463f" text-anchor="end">Front door</text>
+        <text x="186" y="140" font-size="7.5" fill="#9a948b" transform="rotate(-90 186 140)">Interior wall</text>
+      </g>
+      <!-- front door leaf (hinged on the left) -->
+      <line id="fp-door" x1="236" y1="232" x2="261" y2="232" stroke="#4a463f" stroke-width="3" stroke-linecap="round" style="transform-origin:236px 232px;transition:transform .8s"/>
+      <!-- routes (also used as motion paths) -->
+      <path id="fp-route-desk" class="fade" d="M358 76 L359 46 L359 24 L229 24 L229 46 L226 96 L194 96 L140 84" fill="none" stroke="#d4622a" stroke-width="2" stroke-dasharray="4 4" opacity="0"/>
+      <path id="fp-route-sup" d="M425 180 L372 90 L366 60 L366 46 L366 30 L235 30 L235 46 L232 90 L194 92 L104 82" fill="none" stroke="none"/>
+      <path id="fp-route-out" class="fade" d="M140 84 C 110 120, 110 160, 160 180 L194 187 L232 196 L252 214 L252 232 L252 252" fill="none" stroke="#d4622a" stroke-width="2" stroke-dasharray="4 4" opacity="0"/>
+      <!-- barking -->
+      <g id="fp-waves" class="fade" stroke="#d4622a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0">
+        <path d="M367 69 a9 9 0 0 1 0 14"/>
+        <path d="M372 64 a15 15 0 0 1 0 24"/>
+      </g>
+      <!-- people -->
+      <g id="fp-sup" class="fp-move"><circle r="8" fill="#34679e" stroke="#fff" stroke-width="2.5"/></g>
+      <g id="fp-day" class="fp-move"><circle r="8" fill="#8fb2d8" stroke="#fff" stroke-width="2.5"/></g>
+      <g id="fp-sunday" class="fp-move"><circle r="8" fill="#d4622a" stroke="#fff" stroke-width="2.5"/></g>
+    </svg>
+    <div class="plan-legend" aria-hidden="true">
+      <span><i style="background:#d4622a"></i>Sunday</span>
+      <span><i style="background:#34679e"></i>Overnight Playground Supervisor</span>
+      <span><i style="background:#8fb2d8"></i>Day-shift team member</span>
+      <span>Illustration, not to scale</span>
+    </div>
+  </div>
+
+  <div class="dlg-step" id="howStep" aria-live="polite"></div>
+  <div class="dlg-foot">
+    <button class="btn" id="howPrev" type="button">Back</button>
+    <span class="count" id="howCount"></span>
+    <button class="btn primary" id="howNext" type="button">Next</button>
+  </div>
+</dialog>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+/* ------------------------------------------------------------------
+   SETTINGS: edit these before publishing.
+   ------------------------------------------------------------------ */
+const CONFIG = {
+  showSearchBanner: true,      // set to false once Sunday is home
+  sightingsPhone: "913-530-7596",  // blank shows a placeholder
+  dogPhotoUrl: "",             // optional photo of Sunday for the banner
+  searchUpdated: "October 11, 2026",  // shown on "Where the search stands"
+};
+
+// Photos of Sunday (files in the sunday-photos folder next to this page)
+const PHOTOS = [
+  { src: "sunday-photos/sunday-standing.jpg", alt: "Illustration of Sunday standing on grass: black coat, graying muzzle, red collar", pos: "60% 35%",
+    note: "Illustration based on Sunday, not a photo" },
+  { src: "sunday-photos/sunday-face.jpg",  alt: "Close-up of Sunday's face: black fur, brown eyes and a graying chin", pos: "50% 40%" },
+  { src: "sunday-photos/sunday-car.jpg",   alt: "Sunday sitting in a car, wearing a red collar with a bone pattern", pos: "45% 45%" },
+  { src: "sunday-photos/sunday-smile.jpg", alt: "Sunday looking up with her mouth open, in front of window blinds", pos: "35% 45%" },
+];
+
+/* ------------------------------------------------------------------
+   PLACES (longitude, latitude). Sources: OpenStreetMap, Google Maps.
+   ------------------------------------------------------------------ */
+const P = {
+  pawz:       [-94.70105, 38.92626],  // 11200 Mastin St
+  lucky:      [-94.70195, 38.92640],  // 10201 College Blvd
+  doubletree: [-94.70290, 38.92855],  // 10100 College Blvd
+  grantN:     [-94.69620, 38.92775],  // College Blvd & Grant Dr, north side
+  contact:    [-94.69700, 38.92753],  // westbound lanes, College Blvd bridge
+  median:     [-94.69712, 38.92744],  // brick median on the bridge
+  tennis:     [-94.69638, 38.92600],  // Shannon Valley Park tennis courts
+  park:       [-94.69700, 38.92560],
+};
+
+// Route segments. kind: seen | unseen | team. step = the step that draws it.
+const SEGMENTS = [
+  { step: 1, kind: "seen",   coords: [[-94.70105,38.92632],[-94.70120,38.92664],[-94.70150,38.92672],[-94.70185,38.92670]] },
+  { step: 2, kind: "seen",   coords: [[-94.70185,38.92670],[-94.70212,38.92706],[-94.70240,38.92745],[-94.70262,38.92790]] },
+  { step: 3, kind: "team",   coords: [[-94.70226,38.92735],[-94.70190,38.92690],[-94.70140,38.92680],[-94.70108,38.92640]] },
+  { step: 4, kind: "unseen", coords: [[-94.70262,38.92790],[-94.70150,38.92776],[-94.70000,38.92772],[-94.69850,38.92770],[-94.69700,38.92770],[-94.69620,38.92775],[-94.69660,38.92763],[-94.69700,38.92753]] },
+  { step: 5, kind: "seen",   coords: [[-94.69700,38.92753],[-94.69712,38.92744]] },
+  { step: 6, kind: "seen",   coords: [[-94.69712,38.92744],[-94.69708,38.92724]] },
+  { step: 6, kind: "unseen", coords: [[-94.69708,38.92724],[-94.69690,38.92682],[-94.69666,38.92642],[-94.69645,38.92614]] },
+];
+
+// Map steps (0-based in code, shown 1-7). sunday = where her marker rests.
+const STEPS = [
+  {
+    time: "About 6:10 AM",
+    title: "Sunday escapes from Pawz at Play",
+    body: ["Sunday ran out the front door of Pawz at Play, at 11200 Mastin Street. Our team went after her right away, on foot."],
+    more: true,
+    sunday: P.pawz, sundaySeen: true,
+    view: { bounds: [P.pawz, P.lucky, [-94.70040, 38.92700], [-94.70040, 38.92560]], maxZoom: 17.6 },
+  },
+  {
+    time: "Moments later",
+    title: "Pawz at Play staff chase Sunday toward Lucky Strike bowling alley",
+    body: ["Team members followed Sunday on foot to the Lucky Strike bowling alley next door, at 10201 College Boulevard."],
+    sunday: [-94.70185, 38.92670], sundaySeen: true,
+    view: { bounds: [P.pawz, P.lucky, [-94.70150, 38.92720]], maxZoom: 17.6 },
+  },
+  {
+    time: "Moments later",
+    title: "Sunday runs north across College Boulevard to the DoubleTree hotel",
+    body: ["From Lucky Strike, Sunday ran north across College Boulevard toward the DoubleTree hotel, at 10100 College Boulevard."],
+    sunday: [-94.70262, 38.92790], sundaySeen: true,
+    view: { bounds: [P.pawz, P.doubletree, P.lucky, [-94.69990, 38.92620]] },
+  },
+  {
+    time: "About 6:15 AM",
+    title: "Pawz at Play staff call for backup",
+    body: ["Team members ran back to Pawz at Play to get their car keys and call management, who started a call tree to bring more staff in to search.", "During these few minutes, no one could see Sunday."],
+    sunday: [-94.70262, 38.92790], sundaySeen: false,
+    view: { bounds: [P.pawz, P.doubletree, P.lucky, [-94.69990, 38.92620]] },
+  },
+  {
+    time: "Between 6:15 and 6:17 AM",
+    title: "Sunday runs east on College Boulevard and crosses south",
+    body: ["While the team was getting their vehicles, Sunday made her way to Grant Drive on the north side of College Boulevard, then crossed College Boulevard back to the south."],
+    unseenNote: true,
+    sunday: P.contact, sundaySeen: false, labelPos: "b",
+    view: { bounds: [P.doubletree, P.grantN, P.lucky, P.contact, [-94.69540, 38.92780]] },
+  },
+  {
+    time: "About 6:17 AM",
+    title: "Sunday hits a car headed westbound on College Boulevard",
+    body: ["On the College Boulevard bridge near Grant Drive, Sunday ran into the rear quarter panel of a white SUV heading west.", "The driver reported it to animal control. She said the SUV did not hit Sunday; Sunday ran into the SUV. Sunday rolled onto the brick median on the bridge and lay down briefly."],
+    sunday: P.median, sundaySeen: true,
+    view: { center: [-94.69690, 38.92745], zoom: 18.2 },
+  },
+  {
+    time: "Last seen",
+    title: "Sunday heads south toward Shannon Valley Park",
+    body: ["Sunday got back up and headed south into the Shannon Valley neighborhood, toward the tennis courts at Shannon Valley Park.", "This is the last confirmed sighting of Sunday."],
+    sighting: true,
+    sunday: null, sundaySeen: true,
+    view: { bounds: [[-94.69760, 38.92800], [-94.69580, 38.92500]], maxZoom: 18 },
+  },
+];
+
+// "More info on how this happened" steps (floor-plan positions in SVG units)
+const HOW = [
+  {
+    time: "About 6:00 AM",
+    title: "Breakfast in the gated area off Big Pawz",
+    body: [
+      "Sunday's Overnight Playground Supervisor gave her breakfast in the small gated area attached to Big Pawz, the room where she sleeps with her dog friends and the overnight staff. He has known Sunday for seven years, and she has slept right by him on many of her stays.",
+      "Sunday is a <b>“Do Not Kennel”</b> dog. She has kennel anxiety and could hurt herself if confined to a kennel. At Pawz at Play, dogs are kenneled only while they eat and during our afternoon nap time. “Do Not Kennel” dogs eat in small, gated areas instead, and that is where Sunday had breakfast.",
+    ],
+    fig: { sunday: [358, 76], sup: [398, 76], day: null, waves: false, door: false },
+  },
+  {
+    time: "Just after breakfast",
+    title: "Sunday becomes anxious",
+    body: ["When she finished eating, Sunday became anxious in the gated area and began barking and whining."],
+    fig: { sunday: [358, 76], sup: [425, 180], day: null, waves: true, door: false },
+  },
+  {
+    time: "Shortly after 6:00 AM",
+    title: "Brought to the front desk to calm her",
+    body: [
+      "The supervisor heard Sunday's distress and brought her out of the gated area and up to the front desk to comfort her. He did this out of care for Sunday: she was upset, and he wanted her calm and beside someone she knew.",
+      "Sunday stayed with him at the front desk while he wrote his overnight report. That report is the hand-off that tells the day shift everything that happened with his boarding dogs between 10:00 PM and 6:00 AM.",
+    ],
+    fig: { sunday: [140, 84], sup: [104, 82], day: null, waves: false, door: false,
+           routes: { "fp-sunday": "fp-route-desk", "fp-sup": "fp-route-sup" }, trail: "fp-route-desk" },
+  },
+  {
+    time: "About 6:10 AM",
+    title: "The front door opens",
+    body: [
+      "A day-shift team member arrived and opened the front door to clock in. The front door opens into a hallway, and the lobby and front desk are on the other side of an interior wall. He didn't see Sunday walking in the lobby, or the supervisor working at the desk.",
+      "Sunday ran out of the lobby and through the open front door, and our team went after her right away.",
+    ],
+    fig: { sunday: [252, 252], sup: [104, 82], day: [276, 204], waves: false, door: true,
+           routes: { "fp-sunday": "fp-route-out" }, trail: "fp-route-out" },
+  },
+];
+
+/* ------------------------------------------------------------------ */
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const narrow = () => matchMedia("(max-width: 760px)").matches;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const telHref = () => {
+  const d = CONFIG.sightingsPhone.replace(/[^\d]/g, "");
+  return `tel:${d.length === 10 ? "+1" + d : d}`;
+};
+const phoneHTML = () => CONFIG.sightingsPhone
+  ? `<a href="${telHref()}">${esc(CONFIG.sightingsPhone)}</a>`
+  : `<span class="placeholder">[sightings phone number]</span>`;
+
+// Banner
+if (CONFIG.showSearchBanner) {
+  const b = $("banner");
+  b.hidden = false;
+  b.innerHTML = `${CONFIG.dogPhotoUrl ? `<img src="${esc(CONFIG.dogPhotoUrl)}" alt="Sunday">` : ""}
+    <div><strong>Have you seen Sunday?</strong>
+    <p>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.</p></div>`;
+}
+
+// Text timeline (same data as the map)
+$("textTimeline").innerHTML = STEPS.map((s) =>
+  `<li><b>${esc(s.time)}: ${esc(s.title)}</b>${s.body.map(esc).join(" ")}</li>`).join("");
+
+// Photo gallery with a simple full-size viewer
+let photoIdx = 0;
+$("gallery").style.setProperty("--n", PHOTOS.length);
+$("gallery").innerHTML = PHOTOS.map((ph, i) =>
+  `<button type="button" data-i="${i}" aria-label="View image ${i + 1} of ${PHOTOS.length}: ${esc(ph.alt)}"><img src="${esc(ph.src)}" alt="" loading="lazy" style="object-position:${ph.pos}">${ph.note ? '<span class="badge">Illustration</span>' : ""}</button>`).join("");
+function showPhoto(i) {
+  photoIdx = (i + PHOTOS.length) % PHOTOS.length;
+  $("photoBig").src = PHOTOS[photoIdx].src;
+  $("photoBig").alt = PHOTOS[photoIdx].alt;
+  $("photoCount").textContent = `${photoIdx + 1} of ${PHOTOS.length}${PHOTOS[photoIdx].note ? ` · ${PHOTOS[photoIdx].note}` : ""}`;
+}
+$("gallery").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-i]");
+  if (!b) return;
+  showPhoto(+b.dataset.i);
+  $("photoDialog").showModal();
+});
+$("photoPrev").addEventListener("click", () => showPhoto(photoIdx - 1));
+$("photoNext").addEventListener("click", () => showPhoto(photoIdx + 1));
+$("photoDialog").querySelector("[data-close]").addEventListener("click", () => $("photoDialog").close());
+$("photoDialog").addEventListener("click", (e) => { if (e.target === $("photoDialog")) $("photoDialog").close(); });
+$("photoDialog").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") showPhoto(photoIdx + 1);
+  if (e.key === "ArrowLeft") showPhoto(photoIdx - 1);
+});
+
+/* ---------------- Map ---------------- */
+const map = new maplibregl.Map({
+  container: "map",
+  style: "https://tiles.openfreemap.org/styles/positron",
+  center: P.pawz,
+  zoom: 17,
+  cooperativeGestures: true,
+  attributionControl: { compact: true },
+  maxBounds: [[-94.716, 38.918], [-94.684, 38.936]],
+});
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+// Keep the map's drawing size in sync with its box (layout can settle after load)
+new ResizeObserver(() => { map.resize(); map.setPadding(padding()); }).observe($("map"));
+
+function makeMarker(cls, label, pos, lngLat) {
+  const el = document.createElement("div");
+  el.className = `mk ${cls} pos-${pos}`;
+  el.innerHTML = `${cls.includes("last") ? '<span class="ring"></span>' : ""}<span class="dot"></span>${label ? `<span class="lbl">${label}</span>` : ""}`;
+  const m = new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat(lngLat).addTo(map);
+  return { el, m };
+}
+
+const markers = {};
+function addMarkers() {
+  markers.lucky = makeMarker("place", "Lucky Strike", "l", P.lucky);
+  markers.doubletree = makeMarker("place", "DoubleTree hotel", "t", P.doubletree);
+  markers.park = makeMarker("place", "Shannon Valley Park", "b", P.park);
+  markers.tennis = makeMarker("place", "Tennis courts", "r", P.tennis);
+  markers.pawz = makeMarker("pawz", "Pawz at Play", "b", P.pawz);
+  markers.team = makeMarker("team", "Team returns for vehicles", "r", [-94.70095, 38.92640]);
+  markers.vehicle = makeMarker("event", "Vehicle contact, about 6:17 AM", "t", P.contact);
+  markers.last = makeMarker("last", "Last seen", "r", P.median);
+  markers.sunday = makeMarker("sunday", "Sunday", "r", P.pawz);
+  markers.park.el.querySelector(".dot").style.display = "none";
+}
+const showMarker = (k, on) => markers[k].el.classList.toggle("hidden", !on);
+
+const EMPTY = { type: "FeatureCollection", features: [] };
+function addLayers() {
+  map.addSource("park", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [[
+    [-94.69707,38.92727],[-94.69710,38.92689],[-94.69705,38.92636],[-94.69705,38.92577],[-94.69761,38.92538],[-94.69794,38.92518],[-94.69733,38.92460],[-94.69707,38.92479],[-94.69683,38.92490],[-94.69662,38.92497],[-94.69637,38.92503],[-94.69611,38.92505],[-94.69605,38.92510],[-94.69604,38.92520],[-94.69598,38.92550],[-94.69594,38.92592],[-94.69598,38.92626],[-94.69614,38.92662],[-94.69630,38.92694],[-94.69635,38.92727],[-94.69707,38.92727]]] } } });
+  map.addLayer({ id: "park-fill", type: "fill", source: "park", paint: { "fill-color": "#d4622a", "fill-opacity": 0 } });
+  map.addLayer({ id: "park-line", type: "line", source: "park", paint: { "line-color": "#d4622a", "line-width": 1.5, "line-dasharray": [2, 2], "line-opacity": 0 } });
+
+  map.addSource("route", { type: "geojson", data: EMPTY });
+  map.addLayer({ id: "route-casing", type: "line", source: "route", filter: ["!=", ["get", "kind"], "team"],
+    layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff", "line-width": 9, "line-opacity": .85 } });
+  map.addLayer({ id: "route-team", type: "line", source: "route", filter: ["==", ["get", "kind"], "team"],
+    layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#34679e", "line-width": 3.5, "line-dasharray": [0.1, 2] } });
+  map.addLayer({ id: "route-unseen", type: "line", source: "route", filter: ["==", ["get", "kind"], "unseen"],
+    layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#d4622a", "line-width": 4, "line-opacity": .75, "line-dasharray": [1.4, 1.6] } });
+  map.addLayer({ id: "route-seen", type: "line", source: "route", filter: ["==", ["get", "kind"], "seen"],
+    layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#d4622a", "line-width": 5 } });
+}
+
+// Geometry helpers
+const meters = (a, b) => {
+  const k = Math.cos((a[1] * Math.PI) / 180);
+  return Math.hypot((b[0] - a[0]) * 111320 * k, (b[1] - a[1]) * 110540);
+};
+const lineLength = (c) => c.slice(1).reduce((s, p, i) => s + meters(c[i], p), 0);
+function sliceLine(c, t) {
+  const total = lineLength(c) * t;
+  const out = [c[0]];
+  let run = 0;
+  for (let i = 1; i < c.length; i++) {
+    const d = meters(c[i - 1], c[i]);
+    if (run + d >= total) {
+      const f = d ? (total - run) / d : 0;
+      out.push([c[i - 1][0] + (c[i][0] - c[i - 1][0]) * f, c[i - 1][1] + (c[i][1] - c[i - 1][1]) * f]);
+      return out;
+    }
+    run += d; out.push(c[i]);
+  }
+  return out;
+}
+const feature = (kind, coords) => ({ type: "Feature", properties: { kind }, geometry: { type: "LineString", coordinates: coords } });
+
+/* ---------------- Step rendering ---------------- */
+let current = 0;
+let animToken = 0;
+let mapReady = false;
+
+function padding() {
+  if (narrow()) return { top: 20, bottom: 20, left: 20, right: 20 };
+  // leave room for the step card on the left
+  const cardRight = $("map").clientWidth > 900 ? 420 : 400;
+  return { top: 40, bottom: 40, left: cardRight, right: 40 };
+}
+
+// The map keeps a standing padding for the card (set in padding()), so camera
+// calls only add a small margin around the route.
+function moveCamera(view) {
+  const opts = { duration: reduceMotion ? 0 : 1300, essential: true };
+  if (view.bounds) {
+    const b = new maplibregl.LngLatBounds(view.bounds[0], view.bounds[0]);
+    view.bounds.forEach((p) => b.extend(p));
+    map.fitBounds(b, { ...opts, padding: 36, maxZoom: view.maxZoom || 17.8 });
+  } else {
+    map.easeTo({ ...opts, center: view.center, zoom: view.zoom });
+  }
+}
+
+function renderCard(i) {
+  const s = STEPS[i];
+  const unseenNote = s.unseenNote
+    ? `<div class="seen-note"><svg width="28" height="6"><line x1="2" y1="3" x2="26" y2="3" stroke="#d4622a" stroke-width="3" stroke-dasharray="4 4" stroke-linecap="round"/></svg>No one saw this part of her route. The dashed line shows the most likely path.</div>`
+    : "";
+  const more = s.more
+    ? `<button class="more-btn" type="button" id="moreBtn"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>More info on how this happened</button>`
+    : "";
+  const sighting = s.sighting && CONFIG.showSearchBanner
+    ? `<div class="callout"><strong>If you see Sunday</strong>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.</div>`
+    : "";
+  $("cardBody").innerHTML = `<p class="eyebrow">${esc(s.time)}</p><h2>${esc(s.title)}</h2>${s.body.map((p) => `<p>${esc(p)}</p>`).join("")}${unseenNote}${more}${sighting}`;
+  if (s.more) $("moreBtn").addEventListener("click", openHow);
+  $("count").textContent = `${i + 1} of ${STEPS.length}`;
+  $("prevBtn").disabled = i === 0;
+  $("nextBtn").textContent = i === STEPS.length - 1 ? "Start over" : "Next";
+  [...$("progress").children].forEach((b, j) => {
+    b.classList.toggle("on", j === i);
+    b.classList.toggle("done", j < i);
+    b.setAttribute("aria-current", j === i ? "step" : "false");
+  });
+}
+
+function setStaticState(i) {
+  // markers that depend on the step
+  showMarker("team", i === 3);
+  showMarker("vehicle", i === 5);
+  showMarker("last", i === 6);
+  showMarker("tennis", i === 6);
+  showMarker("sunday", STEPS[i].sunday !== null);
+  const s = STEPS[i];
+  if (s.sunday) markers.sunday.m.setLngLat(s.sunday);
+  markers.sunday.el.classList.toggle("unseen", !s.sundaySeen);
+  markers.sunday.el.classList.remove("pos-r", "pos-b");
+  markers.sunday.el.classList.add(`pos-${s.labelPos || "r"}`);
+  markers.sunday.el.querySelector(".lbl").textContent = s.sundaySeen ? "Sunday" : "Sunday (not seen)";
+  map.setPaintProperty("park-fill", "fill-opacity", i === 6 ? 0.12 : 0);
+  map.setPaintProperty("park-line", "line-opacity", i === 6 ? 0.8 : 0);
+}
+
+function goTo(i, { animate = true } = {}) {
+  if (!mapReady) { current = i; renderCard(i); return; }  // map still loading
+  const token = ++animToken;
+  const forward = i === current + 1;
+  current = i;
+  renderCard(i);
+  setStaticState(i);
+  moveCamera(STEPS[i].view);
+
+  const drawing = forward && animate ? SEGMENTS.filter((s) => s.step === i) : [];
+  const base = SEGMENTS.filter((s) => s.step < i).map((s) => feature(s.kind, s.coords));
+  const src = map.getSource("route");
+
+  if (!drawing.length || reduceMotion) {
+    src.setData({ type: "FeatureCollection", features: SEGMENTS.filter((s) => s.step <= i).map((s) => feature(s.kind, s.coords)) });
+    return;
+  }
+
+  // Animate this step's segments one after another
+  src.setData({ type: "FeatureCollection", features: base });
+  const sundayRun = drawing.every((s) => s.kind !== "team");
+  const delay = 650;
+  const total = drawing.reduce((t, s) => t + lineLength(s.coords), 0);
+  const duration = Math.min(2600, Math.max(1000, total * 7));
+  const start = performance.now() + delay;
+  if (sundayRun && STEPS[i].sunday) markers.sunday.m.setLngLat(drawing[0].coords[0]);
+
+  function frame(now) {
+    if (token !== animToken) return;
+    const t = Math.min(1, Math.max(0, (now - start) / duration));
+    const eased = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    let remaining = eased * total;
+    const feats = [...base];
+    let head = null;
+    for (const s of drawing) {
+      const len = lineLength(s.coords);
+      if (remaining <= 0) break;
+      const part = remaining >= len ? s.coords : sliceLine(s.coords, remaining / len);
+      feats.push(feature(s.kind, part));
+      head = part[part.length - 1];
+      remaining -= len;
+    }
+    src.setData({ type: "FeatureCollection", features: feats });
+    if (sundayRun && head && STEPS[i].sunday) markers.sunday.m.setLngLat(head);
+    if (t < 1) requestAnimationFrame(frame);
+    else if (STEPS[i].sunday) markers.sunday.m.setLngLat(STEPS[i].sunday);
+  }
+  requestAnimationFrame(frame);
+}
+
+// Controls
+STEPS.forEach((s, j) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("aria-label", `Step ${j + 1}: ${s.title}`);
+  b.addEventListener("click", () => goTo(j));
+  $("progress").appendChild(b);
+});
+$("prevBtn").addEventListener("click", () => current > 0 && goTo(current - 1));
+$("nextBtn").addEventListener("click", () => goTo(current === STEPS.length - 1 ? 0 : current + 1));
+$("fitBtn").addEventListener("click", () => moveCamera({ bounds: [P.pawz, P.lucky, P.doubletree, P.grantN, [-94.69645, 38.92560]] }));
+document.addEventListener("keydown", (e) => {
+  if ($("howDialog").open || $("photoDialog").open || /input|textarea/i.test(e.target.tagName)) return;
+  if (e.key === "ArrowRight" && current < STEPS.length - 1) goTo(current + 1);
+  if (e.key === "ArrowLeft" && current > 0) goTo(current - 1);
+});
+
+renderCard(0);
+map.on("load", () => {
+  map.setPadding(padding());
+  addLayers();
+  addMarkers();
+  mapReady = true;
+  goTo(current, { animate: false });
+});
+
+/* ---------------- How-this-happened dialog ---------------- */
+let howIdx = 0;
+let howToken = 0;
+const setPos = (el, xy) => { el.style.transform = `translate(${xy[0]}px, ${xy[1]}px)`; };
+function place(id, xy, instant) {
+  const el = $(id);
+  if (!xy) { el.style.opacity = 0; return; }
+  if (instant) { el.style.transition = "none"; setPos(el, xy); el.getBoundingClientRect(); el.style.transition = ""; }
+  else setPos(el, xy);
+  el.style.opacity = 1;
+}
+// Move people along walking routes so they go through doorways, not walls
+function walkRoutes(routes) {
+  const token = ++howToken;
+  const walkers = Object.entries(routes).map(([id, pathId]) => {
+    const el = $(id), path = $(pathId);
+    el.style.transition = "none";
+    return { el, path, len: path.getTotalLength() };
+  });
+  const duration = 2600;
+  const t0 = performance.now();
+  function frame(now) {
+    if (token !== howToken) return;
+    const t = Math.min(1, (now - t0) / duration);
+    const e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    for (const w of walkers) {
+      const p = w.path.getPointAtLength(w.len * e);
+      setPos(w.el, [p.x, p.y]);
+    }
+    if (t < 1) requestAnimationFrame(frame);
+    else walkers.forEach((w) => (w.el.style.transition = ""));
+  }
+  requestAnimationFrame(frame);
+}
+function renderHow(i, { instant = false } = {}) {
+  const forward = i === howIdx + 1;
+  howIdx = i;
+  howToken++;
+  const h = HOW[i];
+  const f = h.fig;
+  $("howStep").innerHTML = `<p class="eyebrow">${esc(h.time)}</p><h2 style="font-size:19px;margin:0 0 8px">${esc(h.title)}</h2>${h.body.map((p) => `<p>${p}</p>`).join("")}`;
+  const animateRoutes = f.routes && forward && !instant && !reduceMotion;
+  const snap = instant || !forward;
+  for (const [id, key] of [["fp-sunday", "sunday"], ["fp-sup", "sup"], ["fp-day", "day"]]) {
+    if (animateRoutes && f.routes[id]) continue;
+    place(id, f[key], snap);
+  }
+  if (animateRoutes) walkRoutes(f.routes);
+  $("fp-waves").style.opacity = f.waves ? 1 : 0;
+  ["fp-route-desk", "fp-route-out"].forEach((r) => ($(r).style.opacity = f.trail === r ? 1 : 0));
+  $("fp-door").style.transform = f.door ? "rotate(-110deg)" : "rotate(0deg)";
+  $("howCount").textContent = `${i + 1} of ${HOW.length}`;
+  $("howPrev").disabled = i === 0;
+  $("howNext").textContent = i === HOW.length - 1 ? "Back to the map" : "Next";
+}
+function openHow() { renderHow(0, { instant: true }); $("howDialog").showModal(); }
+renderHow(0, { instant: true });
+$("howPrev").addEventListener("click", () => howIdx > 0 && renderHow(howIdx - 1));
+$("howNext").addEventListener("click", () => {
+  if (howIdx === HOW.length - 1) { $("howDialog").close(); goTo(1); }
+  else renderHow(howIdx + 1);
+});
+$("howDialog").querySelector("[data-close]").addEventListener("click", () => $("howDialog").close());
+$("howDialog").addEventListener("click", (e) => { if (e.target === $("howDialog")) $("howDialog").close(); });
+
+/* ---------------- Persistent call button ---------------- */
+if (CONFIG.showSearchBanner) {
+  const cta = $("nextCta");
+  cta.hidden = false;
+  cta.innerHTML = `<strong>Think you've seen Sunday?</strong>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.`;
+  const fab = $("callFab");
+  fab.hidden = false;
+  document.body.classList.add("has-call");
+  if (CONFIG.sightingsPhone) {
+    fab.href = telHref();
+    $("callNum").textContent = CONFIG.sightingsPhone;
+  } else {
+    fab.href = "#";
+    fab.addEventListener("click", (e) => e.preventDefault());
+    $("callNum").innerHTML = '<span class="placeholder">[phone number]</span>';
+  }
+}
+
+/* ---------------- Where the search stands ---------------- */
+(() => {
+  // Indian Creek, from OpenStreetMap
+  const CREEK = [[[-94.69749,38.93037],[-94.69742,38.93062],[-94.69749,38.93078],[-94.6978,38.93093],[-94.69796,38.93122],[-94.69799,38.93152],[-94.69799,38.9316],[-94.69796,38.93169],[-94.69789,38.93179],[-94.69777,38.9319],[-94.69756,38.93204],[-94.69738,38.93217],[-94.69723,38.93232],[-94.69717,38.93244],[-94.69708,38.9326],[-94.69697,38.93274],[-94.69685,38.93282],[-94.69668,38.93285],[-94.69641,38.93292],[-94.69625,38.93295],[-94.69616,38.93299],[-94.6961,38.93305],[-94.69609,38.93313],[-94.6961,38.93323],[-94.69617,38.93333],[-94.6963,38.93343],[-94.69664,38.93363],[-94.69683,38.93373],[-94.69692,38.93385],[-94.69696,38.93392],[-94.69695,38.93404],[-94.69691,38.93412],[-94.69686,38.93416],[-94.69673,38.93422],[-94.6966,38.93425],[-94.69621,38.93428],[-94.69612,38.93429],[-94.69602,38.93428],[-94.69552,38.93421],[-94.69538,38.9342],[-94.69525,38.93423],[-94.69505,38.93425],[-94.69494,38.93428],[-94.69482,38.9343],[-94.69468,38.9343],[-94.69449,38.93426],[-94.6944,38.93419],[-94.69435,38.93409],[-94.69429,38.93399],[-94.69428,38.93384],[-94.69429,38.9337],[-94.69433,38.9336],[-94.69437,38.93347],[-94.6944,38.93336],[-94.69435,38.93321],[-94.69426,38.93313],[-94.6939,38.93308],[-94.69375,38.93311],[-94.69363,38.93314],[-94.69351,38.9332],[-94.69338,38.93327],[-94.69326,38.93337],[-94.69319,38.93347],[-94.69313,38.93358],[-94.69308,38.93381],[-94.69329,38.93436],[-94.69327,38.93504],[-94.69323,38.93524],[-94.69305,38.93548],[-94.69262,38.93563],[-94.69219,38.93568],[-94.69141,38.93568],[-94.69048,38.93589],[-94.68968,38.93611],[-94.68913,38.93622],[-94.68881,38.93625],[-94.68836,38.93624],[-94.68812,38.93622],[-94.68784,38.93614],[-94.68753,38.93615],[-94.68713,38.93626],[-94.68664,38.93639],[-94.68644,38.9365],[-94.68601,38.93666],[-94.68555,38.93674],[-94.68523,38.93673],[-94.68486,38.93667],[-94.6846,38.93655],[-94.68442,38.93636],[-94.68429,38.9362],[-94.6842,38.93615],[-94.68404,38.93614],[-94.68389,38.93616],[-94.68369,38.93628],[-94.68344,38.93635],[-94.68333,38.93633],[-94.68322,38.93623],[-94.68311,38.93619],[-94.68298,38.93622],[-94.68286,38.93629],[-94.68272,38.93638],[-94.68271,38.93646],[-94.68269,38.93658],[-94.68262,38.93665],[-94.68248,38.93669],[-94.68247,38.93677],[-94.68247,38.93688],[-94.68235,38.93703],[-94.68204,38.9372],[-94.68197,38.93742],[-94.68181,38.93759],[-94.68162,38.93777],[-94.68154,38.93791],[-94.68145,38.93802],[-94.68146,38.93811],[-94.68129,38.93826],[-94.6813,38.93849],[-94.68121,38.93861],[-94.68102,38.93886],[-94.68075,38.93903],[-94.68053,38.93915],[-94.68029,38.93922],[-94.6801,38.93923],[-94.67991,38.93919],[-94.67967,38.93909],[-94.67945,38.93893],[-94.67928,38.93871],[-94.67912,38.93847],[-94.67897,38.93819],[-94.67885,38.93783],[-94.67882,38.93747],[-94.67877,38.93723],[-94.67865,38.93704],[-94.67844,38.93685],[-94.67826,38.93672],[-94.67803,38.9366],[-94.67789,38.93658],[-94.67777,38.93661],[-94.67765,38.93677],[-94.67741,38.93723],[-94.67722,38.93741],[-94.67689,38.93757],[-94.67657,38.93766],[-94.67633,38.93769],[-94.67594,38.9378],[-94.67559,38.93795],[-94.67527,38.93806],[-94.67502,38.93824],[-94.67494,38.93842],[-94.6749,38.93871],[-94.6748,38.93911],[-94.67465,38.93967],[-94.67434,38.94032],[-94.6742,38.94055],[-94.67404,38.94071],[-94.67372,38.94076],[-94.67339,38.94074],[-94.67309,38.94085],[-94.67255,38.94082],[-94.67212,38.94088],[-94.67171,38.94092],[-94.67128,38.94088],[-94.67087,38.94087],[-94.67063,38.94081],[-94.6703,38.94083],[-94.67007,38.94098],[-94.66997,38.94125],[-94.66983,38.94161],[-94.66969,38.94183],[-94.66966,38.94215],[-94.66958,38.94237],[-94.66941,38.94276],[-94.66914,38.94289],[-94.66878,38.94295],[-94.66817,38.94263],[-94.66791,38.94252],[-94.66776,38.94245],[-94.66711,38.94224],[-94.66672,38.94211],[-94.66572,38.94212],[-94.66552,38.94215],[-94.66532,38.9423],[-94.66516,38.94252],[-94.66526,38.94273],[-94.66557,38.94286],[-94.6657,38.94301],[-94.66563,38.94307],[-94.66556,38.94313],[-94.66521,38.94321]],[[-94.73249,38.90521],[-94.73228,38.90559],[-94.73217,38.90588],[-94.73214,38.90607],[-94.73204,38.9064],[-94.73183,38.90664],[-94.73151,38.90691],[-94.73107,38.90721],[-94.73051,38.90772],[-94.73033,38.90782],[-94.73005,38.90794],[-94.72972,38.90786],[-94.72953,38.90814],[-94.72953,38.90834],[-94.72952,38.90853],[-94.7297,38.90852],[-94.72985,38.90851],[-94.7301,38.90864],[-94.7302,38.9087],[-94.73012,38.90889],[-94.72962,38.90925],[-94.72952,38.90937],[-94.7293,38.90964],[-94.72892,38.90981],[-94.72812,38.91002],[-94.72792,38.9103],[-94.72777,38.91072],[-94.72757,38.91111],[-94.7271,38.9115],[-94.72683,38.91168],[-94.72656,38.91161],[-94.72637,38.9115],[-94.72604,38.91147],[-94.72582,38.91132],[-94.72595,38.91118],[-94.72595,38.91077],[-94.72613,38.91041],[-94.72605,38.91008],[-94.72583,38.90981],[-94.7253,38.90962],[-94.72501,38.90977],[-94.72484,38.91002],[-94.72488,38.91027],[-94.72482,38.91069],[-94.72476,38.911],[-94.72488,38.91125],[-94.72521,38.91145],[-94.72528,38.91171],[-94.72513,38.91196],[-94.72468,38.9121],[-94.72398,38.91208],[-94.72231,38.91203],[-94.72142,38.91209],[-94.72095,38.91211],[-94.72025,38.91214],[-94.71955,38.91219],[-94.7191,38.91236],[-94.71884,38.91261],[-94.71867,38.91284],[-94.71865,38.91315],[-94.71845,38.91342],[-94.71805,38.91357],[-94.71739,38.91358],[-94.71731,38.91359],[-94.71716,38.91361],[-94.71656,38.91352],[-94.71584,38.91354],[-94.71552,38.91357],[-94.71402,38.9137],[-94.71354,38.91371],[-94.71324,38.91394],[-94.71318,38.91411],[-94.7129,38.91427],[-94.71265,38.9143],[-94.71231,38.91425],[-94.71215,38.91412],[-94.71191,38.91409],[-94.71181,38.91419],[-94.71166,38.91483],[-94.71166,38.915],[-94.71159,38.91513],[-94.71165,38.91527],[-94.71175,38.91537],[-94.71183,38.91552],[-94.71175,38.91569],[-94.71157,38.91578],[-94.71131,38.91574],[-94.71118,38.91559],[-94.71103,38.91542],[-94.71082,38.91525],[-94.71043,38.91511],[-94.7101,38.91503],[-94.70987,38.91493],[-94.70971,38.91496],[-94.70945,38.91501],[-94.70917,38.91511],[-94.70883,38.91509],[-94.70834,38.91506],[-94.70805,38.9151],[-94.70778,38.91527],[-94.70741,38.91547],[-94.70734,38.91556],[-94.70731,38.91577],[-94.70727,38.91607],[-94.70726,38.91637],[-94.70728,38.91664],[-94.70739,38.91716],[-94.70747,38.91758],[-94.70751,38.9178],[-94.70756,38.91816],[-94.70758,38.91832],[-94.70759,38.91846],[-94.70759,38.91858],[-94.70757,38.91876],[-94.70742,38.91886],[-94.70729,38.91901],[-94.7073,38.91913],[-94.70739,38.91923],[-94.70742,38.91945],[-94.70737,38.91957],[-94.70721,38.91975],[-94.70708,38.91995],[-94.70697,38.92004],[-94.70668,38.92014],[-94.70651,38.92031],[-94.70632,38.92049],[-94.706,38.92061],[-94.70568,38.92066],[-94.70538,38.92065],[-94.70488,38.92052],[-94.70443,38.92045],[-94.70396,38.92041],[-94.70348,38.92038],[-94.70315,38.92037],[-94.7029,38.92039],[-94.70261,38.92037],[-94.70234,38.92034],[-94.7021,38.9204],[-94.70167,38.92037],[-94.70141,38.92027],[-94.70106,38.92013],[-94.70091,38.92005],[-94.70061,38.92015],[-94.7003,38.92028],[-94.70015,38.92041],[-94.70007,38.92062],[-94.7,38.92085],[-94.70004,38.92108],[-94.70005,38.92133],[-94.70011,38.92149],[-94.70024,38.92187],[-94.70033,38.9224],[-94.7003,38.92267],[-94.70015,38.92291],[-94.69992,38.92308],[-94.69969,38.92315],[-94.69909,38.92336],[-94.69878,38.92358],[-94.69857,38.92382],[-94.69849,38.92408],[-94.69838,38.92443],[-94.69832,38.92467],[-94.6983,38.92496],[-94.69844,38.9251],[-94.69847,38.92527],[-94.69832,38.92546],[-94.69785,38.92551],[-94.69745,38.92564],[-94.69724,38.92595],[-94.69708,38.92642],[-94.69716,38.9267],[-94.69712,38.92723],[-94.6971,38.92766],[-94.69707,38.92791],[-94.69691,38.92821],[-94.69669,38.92854],[-94.69675,38.92881],[-94.69698,38.92892],[-94.69736,38.92892],[-94.6978,38.929],[-94.69789,38.92927],[-94.69775,38.92956],[-94.69733,38.92958],[-94.69709,38.92981],[-94.69701,38.93011],[-94.69742,38.93024],[-94.69749,38.93037]],[[-94.67496,38.94564],[-94.67475,38.94551],[-94.67471,38.94541],[-94.67468,38.94522],[-94.67469,38.94505],[-94.67491,38.9449],[-94.67499,38.94486],[-94.67498,38.94477],[-94.67488,38.94466],[-94.67489,38.94459]],[[-94.67489,38.94459],[-94.6749,38.9443],[-94.67491,38.94423],[-94.67471,38.94419],[-94.67455,38.94423],[-94.67444,38.9443],[-94.67421,38.94432],[-94.67395,38.94426],[-94.67363,38.94427],[-94.67347,38.94433],[-94.67341,38.94444],[-94.67321,38.94441],[-94.67308,38.94429]],[[-94.67308,38.94429],[-94.67294,38.94404],[-94.67283,38.94381],[-94.67279,38.94365],[-94.6726,38.94342],[-94.6725,38.94326],[-94.67246,38.94316],[-94.67235,38.94318],[-94.67215,38.94323],[-94.67196,38.9433],[-94.67179,38.9433],[-94.67163,38.94327],[-94.67141,38.94318],[-94.67127,38.9431],[-94.67117,38.94305],[-94.67101,38.94305],[-94.67094,38.9431],[-94.67086,38.94315],[-94.67077,38.94317],[-94.67062,38.94315],[-94.67055,38.94306],[-94.67053,38.94294],[-94.67039,38.94279],[-94.67036,38.94262],[-94.6703,38.94257],[-94.67017,38.94258],[-94.67008,38.94257],[-94.67007,38.94246],[-94.67005,38.94235],[-94.67,38.94229],[-94.66993,38.94231],[-94.66979,38.94232],[-94.66967,38.94232],[-94.66958,38.94237]],[[-94.67681,38.94628],[-94.676,38.94603],[-94.67549,38.9458],[-94.67522,38.94571],[-94.67496,38.94564]],[[-94.67703,38.94636],[-94.67681,38.94628]],[[-94.67713,38.94646],[-94.67703,38.94636]]];
+  // Search areas, traced from the search team's map (areas_explored.png)
+  const AREAS = {
+    blue:   { color: "#2b7bb9", fill: 0.10, dash: true,  polys: [[[-94.70042,38.93552],[-94.70028,38.93683],[-94.69534,38.93694],[-94.69477,38.94141],[-94.68742,38.94152],[-94.68629,38.94054],[-94.68432,38.94174],[-94.67796,38.94181],[-94.67753,38.93431],[-94.68629,38.93486],[-94.70042,38.93552]], [[-94.70509,38.93503],[-94.70353,38.93442],[-94.68615,38.93381],[-94.68615,38.92739],[-94.70509,38.92743],[-94.70509,38.93503]], [[-94.70495,38.92704],[-94.68658,38.92715],[-94.6868,38.91825],[-94.68884,38.91782],[-94.6911,38.91694],[-94.69562,38.91694],[-94.69845,38.9176],[-94.70466,38.91764],[-94.70495,38.92704]]] },
+    yellow: { color: "#d4a300", fill: 0.28, dash: false, polys: [[[-94.69449,38.93552],[-94.69421,38.93617],[-94.69138,38.93672],[-94.68742,38.93748],[-94.68644,38.93715],[-94.68587,38.93595],[-94.68474,38.93595],[-94.68432,38.93573],[-94.6781,38.93547],[-94.6781,38.93497],[-94.68573,38.93512],[-94.69279,38.93512],[-94.69449,38.93552]], [[-94.70028,38.93431],[-94.69392,38.93442],[-94.69294,38.93394],[-94.69308,38.93311],[-94.69449,38.93289],[-94.69675,38.93278],[-94.6976,38.9325],[-94.69816,38.93267],[-94.69887,38.93344],[-94.69986,38.93377],[-94.70028,38.93431]], [[-94.70466,38.93337],[-94.70331,38.93359],[-94.70367,38.93246],[-94.70359,38.93115],[-94.7024,38.93038],[-94.70085,38.9301],[-94.69929,38.93071],[-94.69774,38.93093],[-94.69689,38.92994],[-94.69652,38.92874],[-94.69689,38.92765],[-94.70466,38.92761],[-94.70466,38.93337]], [[-94.69901,38.92699],[-94.69633,38.92704],[-94.69596,38.92546],[-94.69732,38.9247],[-94.69845,38.92372],[-94.69992,38.92258],[-94.70093,38.92315],[-94.7,38.92459],[-94.69929,38.92568],[-94.69901,38.92699]]] },
+    green:  { color: "#2e8b57", fill: 0.22, dash: false, polys: [[[-94.7041,38.92175],[-94.70283,38.9212],[-94.70127,38.92262],[-94.70071,38.92306],[-94.69986,38.92262],[-94.69986,38.92109],[-94.69901,38.92066],[-94.69816,38.92055],[-94.69811,38.91782],[-94.70212,38.91804],[-94.70353,38.91978],[-94.7041,38.92175]]] },
+    red:    { color: "#cf3440", fill: 0.10, dash: false, polys: [[[-94.70636,38.92164],[-94.70565,38.92153],[-94.70523,38.92109],[-94.70509,38.91301],[-94.71922,38.9129],[-94.71823,38.91367],[-94.71399,38.9141],[-94.71201,38.91563],[-94.7106,38.91716],[-94.70918,38.91847],[-94.70749,38.92022],[-94.70692,38.92131],[-94.70636,38.92164]]] },
+  };
+  const LEGEND = [
+    { key: "creek",  label: "Indian Creek: Sunday's likely route", swatch: "background:repeating-linear-gradient(90deg,#d4622a 0 6px,transparent 6px 10px);height:4px" },
+    { key: "scent",  label: "Scent tracking dog route", swatch: "background:#e0447c;height:4px;border-radius:2px" },
+    { key: "green",  label: "Searched on foot, by drone and scent dog", swatch: "background:rgba(46,139,87,.35);border:2px solid #2e8b57" },
+    { key: "yellow", label: "Searched thoroughly", swatch: "background:rgba(242,194,48,.5);border:2px solid #d4a300" },
+    { key: "blue",   label: "Searched by thermal drone", swatch: "background:rgba(43,123,185,.15);border:2px dashed #2b7bb9" },
+    { key: "red",    label: "Not searched yet", swatch: "background:rgba(207,52,64,.12);border:2px solid #cf3440" },
+  ];
+  // Scent tracking dog route, Sat Oct 10, 11:30 PM (traced from the search team's map)
+  const SCENT = [[-94.69734,38.92705],[-94.69761,38.92592],[-94.69805,38.92479],[-94.69868,38.92395],[-94.69939,38.92331],[-94.69992,38.92289],[-94.70037,38.92239],[-94.70073,38.92155],[-94.70096,38.92042],[-94.70103,38.91929],[-94.70099,38.91781]];
+  const SCHOOL = [-94.69900, 38.91900];
+  const BRIDGE69 = [-94.70370, 38.92040];
+  const HOME = [-94.67632, 38.94064];  // The Club at Indian Creek Apartment Homes (Google Maps)
+
+  const SSTEPS = [
+    {
+      key: "all", time: `As of ${CONFIG.searchUpdated}`,
+      title: "Where we've searched so far",
+      body: ["Pawz at Play staff, volunteers, Sunday's owner and friends have been searching since Friday morning. Each shaded area has already been searched.", "That doesn't mean Sunday isn't there. It just means we've had people looking in the area.", "Tap Next to see each area, and where we still need help."],
+    },
+    {
+      key: "creek", time: "Sunday's likely route",
+      title: "Sunday likely followed Indian Creek south",
+      body: ["We believe Sunday traveled south along Indian Creek after she was last seen. She could be anywhere along the creek, which is marked in orange.", "Sunday lives near 103rd Street and Lowell Avenue, northeast along the same creek."],
+    },
+    {
+      key: "green", time: "Searched on foot",
+      title: "Searched around Indian Valley Elementary",
+      bullets: [
+        "Pawz at Play staff, volunteers, Sunday's owner and friends searched this area on foot.",
+        "Searchers went through the heavily wooded areas around the trail and the baseball diamonds near the school.",
+        "Both sides of Indian Creek were checked on foot, up to the US-69 bridge.",
+        "A thermal imaging drone searched this area until 2:15 AM on Sunday, October 11.",
+        "A scent tracking dog searched this area.",
+      ],
+    },
+    {
+      key: "scent", time: "Saturday, October 10, 11:30 PM",
+      title: "Scent tracking dog searches along Indian Creek",
+      body: ["At 11:30 PM on Saturday, October 10, a scent tracking dog searched for Sunday. The pink line shows the dog's route, from College Boulevard near where Sunday was last seen, south along Indian Creek to Indian Valley Elementary."],
+    },
+    {
+      key: "yellow", time: "Searched thoroughly",
+      title: "Other areas searched thoroughly",
+      body: ["Searchers have thoroughly covered the areas shaded yellow. These include the creek south of College Boulevard where Sunday was last seen, the woods around the DoubleTree hotel and Corporate Woods, and the strip north of I-435 by Brookridge Golf Club.", "A scent tracking dog also searched the creek south of College Boulevard."],
+    },
+    {
+      key: "blue", time: "Searched from the air",
+      title: "Searched by thermal imaging drones",
+      body: ["Thermal drones searched the areas outlined in blue: north of I-435 around Brookridge Golf Club, Corporate Woods, and the neighborhoods south of College Boulevard between US-69 and Antioch Road.", "These overlap with the areas searched on foot."],
+    },
+    {
+      key: "red", time: "Where we need help",
+      title: "Not searched yet: southwest along Indian Creek",
+      body: ["Sunday may have continued southwest along Indian Creek. The area between Switzer Road and Quivira Road, from 115th Terrace to 119th Street, has not been searched yet."],
+      sub: "If you live or walk nearby",
+      bullets: [
+        "Check sheds, garages, and under decks and porches.",
+        "Look along the creek banks and wooded areas, especially at dawn and dusk.",
+        "If you see Sunday, don't chase or call out to her. Stay where you are, note the spot, and call us.",
+      ],
+      sighting: true,
+    },
+  ];
+
+  const ALL_BOUNDS = [[-94.7245, 38.9126], [-94.6725, 38.9435]];
+  function boundsOf(key) {
+    if (key === "all" || key === "creek") return ALL_BOUNDS;
+    const b = new maplibregl.LngLatBounds();
+    if (key === "scent") { SCENT.forEach((pt) => b.extend(pt)); return b.toArray(); }
+    AREAS[key].polys.forEach((poly) => poly.forEach((pt) => b.extend(pt)));
+    return b.toArray();
+  }
+
+  const smap = new maplibregl.Map({
+    container: "searchMap",
+    style: "https://tiles.openfreemap.org/styles/positron",
+    bounds: ALL_BOUNDS,
+    cooperativeGestures: true,
+    attributionControl: { compact: true },
+    maxBounds: [[-94.745, 38.900], [-94.655, 38.955]],
+  });
+  smap.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+  const sPadding = () => {
+    if (narrow()) return { top: 16, bottom: 16, left: 16, right: 16 };
+    return { top: 30, bottom: 30, left: $("searchMap").clientWidth > 900 ? 410 : 390, right: 30 };
+  };
+  new ResizeObserver(() => { smap.resize(); smap.setPadding(sPadding()); }).observe($("searchMap"));
+
+  function tag(cls, label, pos, lngLat) {
+    const el = document.createElement("div");
+    el.className = `mk ${cls} pos-${pos}`;
+    el.innerHTML = `${cls.includes("last") ? '<span class="ring"></span>' : ""}<span class="dot"></span><span class="lbl">${label}</span>`;
+    new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat(lngLat).addTo(smap);
+    return el;
+  }
+
+  let sCur = 0;
+  let sReady = false;
+
+  function emphasize(key) {
+    for (const [k, a] of Object.entries(AREAS)) {
+      const on = key === "all" || key === k;
+      smap.setPaintProperty(`a-${k}-fill`, "fill-opacity", a.fill * (on ? 1 : 0.3));
+      smap.setPaintProperty(`a-${k}-line`, "line-opacity", on ? 1 : 0.3);
+      smap.setPaintProperty(`a-${k}-line`, "line-width", key === k ? 3.5 : 2);
+    }
+    const creekOn = key === "all" || key === "creek" || key === "red";
+    smap.setPaintProperty("creek-line", "line-opacity", creekOn ? 1 : 0.45);
+    smap.setPaintProperty("creek-line", "line-width", key === "creek" ? 5 : 3.5);
+    const scentOn = key === "all" || key === "scent";
+    smap.setPaintProperty("scent-line", "line-opacity", scentOn ? 1 : 0.35);
+    smap.setPaintProperty("scent-halo", "line-opacity", scentOn ? 0.9 : 0);
+    smap.setPaintProperty("scent-line", "line-width", key === "scent" ? 5 : 3.5);
+  }
+
+  function renderS(i) {
+    const s = SSTEPS[i];
+    const bullets = s.bullets ? `${s.sub ? `<p class="sub">${esc(s.sub)}</p>` : ""}<ul>${s.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : "";
+    const sighting = s.sighting && CONFIG.showSearchBanner
+      ? `<div class="callout"><strong>Seen Sunday?</strong>Call ${phoneHTML()} right away.</div>` : "";
+    $("sBody").innerHTML = `<p class="eyebrow">${esc(s.time)}</p><h2>${esc(s.title)}</h2>${(s.body || []).map((p) => `<p>${esc(p)}</p>`).join("")}${bullets}${sighting}`;
+    $("sCount").textContent = `${i + 1} of ${SSTEPS.length}`;
+    $("sPrev").disabled = i === 0;
+    $("sNext").textContent = i === SSTEPS.length - 1 ? "Start over" : "Next";
+    [...$("sProgress").children].forEach((b, j) => {
+      b.classList.toggle("on", j === i);
+      b.classList.toggle("done", j < i);
+      b.setAttribute("aria-current", j === i ? "step" : "false");
+    });
+    [...$("areaLegend").children].forEach((b) => b.setAttribute("aria-current", b.dataset.key === s.key ? "true" : "false"));
+  }
+
+  function sGoTo(i) {
+    sCur = i;
+    renderS(i);
+    if (!sReady) return;
+    emphasize(SSTEPS[i].key);
+    smap.fitBounds(boundsOf(SSTEPS[i].key), { padding: 30, maxZoom: 16.3, duration: reduceMotion ? 0 : 1300, essential: true });
+  }
+
+  // Controls
+  SSTEPS.forEach((s, j) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-label", `Area ${j + 1}: ${s.title}`);
+    b.addEventListener("click", () => sGoTo(j));
+    $("sProgress").appendChild(b);
+  });
+  LEGEND.forEach((l) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.key = l.key;
+    b.innerHTML = `<span class="sw" style="${l.swatch}"></span>${esc(l.label)}`;
+    b.addEventListener("click", () => sGoTo(SSTEPS.findIndex((s) => s.key === l.key)));
+    $("areaLegend").appendChild(b);
+  });
+  $("sPrev").addEventListener("click", () => sCur > 0 && sGoTo(sCur - 1));
+  $("sNext").addEventListener("click", () => sGoTo(sCur === SSTEPS.length - 1 ? 0 : sCur + 1));
+  $("sFit").addEventListener("click", () => smap.fitBounds(ALL_BOUNDS, { padding: 30, duration: reduceMotion ? 0 : 1000 }));
+  $("updatedTag").textContent = `Updated ${CONFIG.searchUpdated}`;
+  $("searchText").innerHTML = SSTEPS.slice(1).map((s) =>
+    `<p><b>${esc(s.title)}.</b> ${[...(s.body || []), ...(s.bullets || [])].map(esc).join(" ")}</p>`).join("");
+  renderS(0);
+
+  smap.on("load", () => {
+    smap.setPadding(sPadding());
+    for (const [k, a] of Object.entries(AREAS)) {
+      smap.addSource(`a-${k}`, { type: "geojson", data: { type: "FeatureCollection", features: a.polys.map((poly) => ({ type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [poly] } })) } });
+      smap.addLayer({ id: `a-${k}-fill`, type: "fill", source: `a-${k}`, paint: { "fill-color": a.color, "fill-opacity": a.fill } });
+      smap.addLayer({ id: `a-${k}-line`, type: "line", source: `a-${k}`, layout: { "line-join": "round" },
+        paint: { "line-color": a.color, "line-width": 2, ...(a.dash ? { "line-dasharray": [2, 1.5] } : {}) } });
+    }
+    smap.addSource("creek", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "MultiLineString", coordinates: CREEK } } });
+    smap.addLayer({ id: "creek-halo", type: "line", source: "creek", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff", "line-width": 7, "line-opacity": 0.8 } });
+    smap.addLayer({ id: "creek-line", type: "line", source: "creek", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#d4622a", "line-width": 3.5, "line-dasharray": [1.6, 1.2] } });
+
+    smap.addSource("scent", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: SCENT } } });
+    smap.addLayer({ id: "scent-halo", type: "line", source: "scent", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff", "line-width": 8, "line-opacity": 0.9 } });
+    smap.addLayer({ id: "scent-line", type: "line", source: "scent", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#e0447c", "line-width": 3.5 } });
+
+    tag("pawz", "Pawz at Play", "l", P.pawz);
+    tag("last", "Last seen", "r", P.median);
+    tag("place", "Indian Valley Elementary", "r", SCHOOL);
+    tag("place", "US-69 bridge", "l", BRIDGE69);
+    tag("home", "Sunday's home", "l", HOME);
+    tag("tag red", "Not searched yet", "b", [-94.71300, 38.91590]);
+    sReady = true;
+    sGoTo(sCur);
+  });
+})();
+</script>
+</body>
+</html>

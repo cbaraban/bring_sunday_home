@@ -1,0 +1,8 @@
+# Only the website files are published. Everything else in this folder
+# (original photos, PDFs, map screenshots) stays local.
+/*
+!/.gitignore
+!/.nojekyll
+!/CNAME
+!/index.html
+!/sunday-photos/
