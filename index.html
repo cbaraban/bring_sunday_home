@@ -66,8 +66,8 @@
   .card p { margin: 0 0 12px; }
   .seen-note { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 12px; }
   .seen-note svg { flex: none; }
-  .more-btn { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 12px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--hair); background: var(--bg); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
-  .more-btn:hover { border-color: #cfc8bd; background: #f3f0eb; }
+  .more-btn { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 12px; padding: 11px 18px; border-radius: 10px; border: 1px solid var(--ink); background: var(--ink); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  .more-btn:hover { background: #000; border-color: #000; }
   .callout { background: var(--sunday-soft); border-radius: 10px; padding: 12px 14px; font-size: 15px; margin: 4px 0 12px; }
   .callout strong { display: block; }
   .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--hair); }
@@ -718,7 +718,7 @@ function renderCard(i) {
     ? `<div class="seen-note"><svg width="28" height="6"><line x1="2" y1="3" x2="26" y2="3" stroke="#d4622a" stroke-width="3" stroke-dasharray="4 4" stroke-linecap="round"/></svg>No one saw this part of her route. The dashed line shows the most likely path.</div>`
     : "";
   const more = s.more
-    ? `<button class="more-btn" type="button" id="moreBtn"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>More info on how this happened</button>`
+    ? `<button class="more-btn" type="button" id="moreBtn"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5M10 6.2v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Click to Learn More</button>`
     : "";
   const sighting = s.sighting && CONFIG.showSearchBanner
     ? `<div class="callout"><strong>If you see Sunday</strong>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.</div>`
