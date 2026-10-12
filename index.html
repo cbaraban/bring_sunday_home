@@ -307,7 +307,7 @@
   <section class="section-search" id="search" aria-labelledby="searchTitle">
     <span class="updated" id="updatedTag"></span>
     <h2 class="sec" id="searchTitle">Where the search stands</h2>
-    <p class="lede">Purple shows where Sunday may be, based on what scent dogs found on October 12. Other shaded areas have already been searched, but that doesn't mean Sunday isn't there. It just means people have been looking in those areas. The area outlined in red has not been searched yet.</p>
+    <p class="lede">Purple shows where Sunday may be: east of Grandview Drive, based on what scent dogs found on October 12, and a second, partly searched area southwest along Indian Creek. Other shaded areas have already been searched, but that doesn't mean Sunday isn't there. It just means people have been looking in those areas.</p>
 
     <div class="stage">
       <div id="searchMap" class="map-el" role="img" aria-label="Map of Indian Creek and the surrounding neighborhoods in Overland Park, Kansas, showing which areas have been searched for Sunday. The same information is in the text summary below the map."></div>
@@ -998,7 +998,8 @@ if (CONFIG.showSearchBanner) {
     green:  { color: "#2e8b57", fill: 0.22, dash: false, polys: [[[-94.7041,38.92175],[-94.70283,38.9212],[-94.70127,38.92262],[-94.70071,38.92306],[-94.69986,38.92262],[-94.69986,38.92109],[-94.69901,38.92066],[-94.69816,38.92055],[-94.69811,38.91782],[-94.70212,38.91804],[-94.70353,38.91978],[-94.7041,38.92175]]] },
     // Where Sunday may be, from the Oct 12 scent dogs (traced from the search team's map)
     maybe:  { color: "#7b4fd0", fill: 0.20, dash: false, polys: [[[-94.69148,38.92736],[-94.6872,38.92728],[-94.6872,38.92673],[-94.68772,38.92665],[-94.68779,38.92587],[-94.68772,38.92534],[-94.68802,38.92477],[-94.68794,38.92424],[-94.6866,38.9243],[-94.68657,38.92199],[-94.68645,38.91944],[-94.69129,38.9195],[-94.6914,38.92164],[-94.69188,38.92268],[-94.69166,38.92303],[-94.69129,38.92355],[-94.69125,38.92453],[-94.69118,38.92477],[-94.69144,38.92587],[-94.69159,38.92604],[-94.69155,38.92734],[-94.69148,38.92736]]] },
-    red:    { color: "#cf3440", fill: 0.10, dash: false, polys: [[[-94.70636,38.92164],[-94.70565,38.92153],[-94.70523,38.92109],[-94.70509,38.91301],[-94.71922,38.9129],[-94.71823,38.91367],[-94.71399,38.9141],[-94.71201,38.91563],[-94.7106,38.91716],[-94.70918,38.91847],[-94.70749,38.92022],[-94.70692,38.92131],[-94.70636,38.92164]]] },
+    // Second possibility: southwest along Indian Creek (partly searched)
+    red:    { color: "#7b4fd0", fill: 0.12, dash: true, polys: [[[-94.70636,38.92164],[-94.70565,38.92153],[-94.70523,38.92109],[-94.70509,38.91301],[-94.71922,38.9129],[-94.71823,38.91367],[-94.71399,38.9141],[-94.71201,38.91563],[-94.7106,38.91716],[-94.70918,38.91847],[-94.70749,38.92022],[-94.70692,38.92131],[-94.70636,38.92164]]] },
   };
   const LEGEND = [
     { key: "grandview", label: "Where Sunday may be (Oct 12)", swatch: "background:rgba(123,79,208,.3);border:2px solid #7b4fd0" },
@@ -1007,7 +1008,7 @@ if (CONFIG.showSearchBanner) {
     { key: "green",  label: "Searched on foot, by drone and scent dog", swatch: "background:rgba(46,139,87,.35);border:2px solid #2e8b57" },
     { key: "yellow", label: "Searched thoroughly", swatch: "background:rgba(242,194,48,.5);border:2px solid #d4a300" },
     { key: "blue",   label: "Searched by thermal drone", swatch: "background:rgba(43,123,185,.15);border:2px dashed #2b7bb9" },
-    { key: "red",    label: "Not searched yet", swatch: "background:rgba(207,52,64,.12);border:2px solid #cf3440" },
+    { key: "red",    label: "Also possible, partly searched", swatch: "background:rgba(123,79,208,.15);border:2px dashed #7b4fd0" },
   ];
   // Scent tracking dog route, Sat Oct 10, 11:30 PM (traced from the search team's map)
   const SCENT = [[-94.69734,38.92705],[-94.69761,38.92592],[-94.69805,38.92479],[-94.69868,38.92395],[-94.69939,38.92331],[-94.69992,38.92289],[-94.70037,38.92239],[-94.70073,38.92155],[-94.70096,38.92042],[-94.70103,38.91929],[-94.70099,38.91781]];
@@ -1067,9 +1068,9 @@ if (CONFIG.showSearchBanner) {
       body: ["Thermal drones searched the areas outlined in blue: north of I-435 around Brookridge Golf Club, Corporate Woods, and the neighborhoods south of College Boulevard between US-69 and Antioch Road.", "These overlap with the areas searched on foot."],
     },
     {
-      key: "red", time: "Where we need help",
-      title: "Not searched yet: southwest along Indian Creek",
-      body: ["Sunday may have continued southwest along Indian Creek. The area between Switzer Road and Quivira Road, from 115th Terrace to 119th Street, has not been searched yet."],
+      key: "red", time: "Another possibility",
+      title: "Also possible: southwest along Indian Creek",
+      body: ["The area between Switzer Road and Quivira Road, from 115th Terrace to 119th Street, has been partly searched. Sunday could still be here, especially near the creek, so we're keeping it on the map as a possibility."],
       sub: "If you live or walk nearby",
       bullets: [
         "Check sheds, garages, and under decks and porches.",
@@ -1216,7 +1217,7 @@ if (CONFIG.showSearchBanner) {
     tag("place", "Indian Valley Elementary", "r", SCHOOL);
     tag("place", "US-69 bridge", "l", BRIDGE69);
     tag("home", "Sunday's home", "l", HOME);
-    tag("tag red", "Not searched yet", "b", [-94.71300, 38.91590]);
+    tag("tag purple", "Also possible", "b", [-94.71300, 38.91590]);
     tag("scentstop", "Scent stops at Grandview Dr", "t", GRANDVIEW);
     tag("tag purple", "Sunday may be here", "b", [-94.68900, 38.92330]);
     // Possible sighting (Oct 12), smaller marker with her direction of travel
