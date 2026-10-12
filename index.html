@@ -166,6 +166,11 @@
   .alert h2 { font-size: clamp(30px, 5.4vw, 52px); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 12px; max-width: 900px; }
   .alert p { margin: 0 0 14px; font-size: 18px; max-width: 820px; color: #fdf1ea; }
   .alert #alertBody { margin-bottom: 20px; }
+  .alert .earlier { margin-top: 22px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.3); }
+  .alert .earlier-h { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 6px; color: #ffd7c2; }
+  .alert .earlier a { display: block; color: #fff; font-weight: 600; text-decoration: none; padding: 4px 0; }
+  .alert .earlier a:hover { text-decoration: underline; }
+  .alert .earlier a span { color: #ffd7c2; font-weight: 500; margin-right: 4px; }
   .alert .reward-pill { background: #ffd84d !important; color: #22201c !important; padding: 3px 10px; border-radius: 999px; }
   .banner .reward { display: inline-block; background: #ffd84d; color: #22201c; font-weight: 700; font-size: 14px; padding: 2px 9px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; }
   .alert-actions { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -258,6 +263,7 @@
       <a class="a-btn light" href="#search" id="alertMap">See it on the map</a>
       <a class="a-btn outline" id="alertCall" hidden></a>
     </div>
+    <div class="earlier" id="alertEarlier" hidden></div>
   </section>
 
   <div class="banner" id="banner" hidden></div>
@@ -307,7 +313,7 @@
   <section class="section-search" id="search" aria-labelledby="searchTitle">
     <span class="updated" id="updatedTag"></span>
     <h2 class="sec" id="searchTitle">Where the search stands</h2>
-    <p class="lede">Purple shows where Sunday may be: east of Grandview Drive, based on what scent dogs found on October 12, and a second, partly searched area southwest along Indian Creek. Other shaded areas have already been searched, but that doesn't mean Sunday isn't there. It just means people have been looking in those areas.</p>
+    <p class="lede"><b>Newest:</b> a possible sighting at 4:20 PM on October 12, at 99th Street and Antioch Road, heading east into Pinehurst Estates. Purple shows where Sunday may be: east of Grandview Drive, based on what scent dogs found on October 12, and a second, partly searched area southwest along Indian Creek. Other shaded areas have already been searched, but that doesn't mean Sunday isn't there. It just means people have been looking in those areas.</p>
 
     <div class="stage">
       <div id="searchMap" class="map-el" role="img" aria-label="Map of Indian Creek and the surrounding neighborhoods in Overland Park, Kansas, showing which areas have been searched for Sunday. The same information is in the text summary below the map."></div>
@@ -339,7 +345,7 @@
         <div>
           <p class="when">A call to neighbors</p>
           <h3>Keep an eye out and check your yards</h3>
-          <p>If you're out in the evening, especially between Grandview Drive and Antioch Road from College Boulevard to 116th Terrace, please keep an eye out. We're also asking neighbors in Shannon Valley Estates, Indian Creek Estates, Hunter's Pointe, Rolling Woods, and South Woods to check their back yards, side yards, and under porches and decks.</p>
+          <p>If you live in or near Pinehurst Estates, near 99th Street and Antioch Road, please check your yards and keep an eye out. If you're out in the evening, especially between Grandview Drive and Antioch Road from College Boulevard to 116th Terrace, please keep an eye out. We're also asking neighbors in Shannon Valley Estates, Indian Creek Estates, Hunter's Pointe, Rolling Woods, and South Woods to check their back yards, side yards, and under porches and decks.</p>
         </div>
       </li>
       <li>
@@ -475,14 +481,18 @@ const CONFIG = {
   reward: "$3,000 reward for Sunday's safe return",  // blank hides the reward everywhere
   // Big alert card at the top of the page. Set to null to hide it.
   latestUpdate: {
-    date: "Monday, October 12",
-    title: "Scent dogs tracked Sunday east to Grandview Drive",
+    date: "Monday, October 12, 4:20 PM",
+    title: "Possible sighting on 99th Street, heading into Pinehurst Estates",
     body: [
-      "Three scent dogs confirmed Sunday's path from Pawz at Play to the DoubleTree Hotel, and up to Grant Drive. Then they followed her scent east towards Grandview Drive, where it stops. She may be on the east side of Shannon Valley, not the west side as we first thought.",
-      "At this point, with limited sightings, we have to consider that someone may have picked her up. Please continue to keep an eye out for her, check with your neighbors who may not be on social media, continue to share our posts about her, and keep a lookout on the shelter and rescue groups for any dog that looks like Sunday!",
+      "At 4:20 PM, a driver heading south on Antioch Road called to report a black Lab with a pink or red collar, matching Sunday's description, heading east on 99th Street into Pinehurst Estates.",
+      "If you live in or near Pinehurst Estates, please check your yards, under porches and decks, and keep an eye out. If you see Sunday, call us right away.",
     ],
-    mapStep: "grandview",  // "See it on the map" opens this step of the search map
+    mapStep: "pinehurst",  // "See it on the map" opens this step of the search map
   },
+  // Shown under the top card as "Earlier updates"
+  earlierUpdates: [
+    { date: "Earlier today", title: "Scent dogs tracked Sunday east to Grandview Drive", mapStep: "grandview" },
+  ],
 };
 
 // Photos of Sunday (files in the sunday-photos folder next to this page)
@@ -651,6 +661,16 @@ if (CONFIG.latestUpdate) {
     $("alertCall").textContent = `Call ${CONFIG.sightingsPhone}`;
   }
   $("alertMap").addEventListener("click", () => window.focusSearchStep && window.focusSearchStep(u.mapStep));
+  if (CONFIG.earlierUpdates && CONFIG.earlierUpdates.length) {
+    const e = $("alertEarlier");
+    e.hidden = false;
+    e.innerHTML = `<p class="earlier-h">Earlier updates</p>` + CONFIG.earlierUpdates.map((x, i) =>
+      `<a href="#search" data-step="${esc(x.mapStep)}"><span>${esc(x.date)}</span> ${esc(x.title)} &rarr;</a>`).join("");
+    e.addEventListener("click", (ev) => {
+      const a = ev.target.closest("a[data-step]");
+      if (a && window.focusSearchStep) window.focusSearchStep(a.dataset.step);
+    });
+  }
 }
 
 // Text timeline (same data as the map)
@@ -1018,6 +1038,9 @@ if (CONFIG.showSearchBanner) {
   // Possible sighting, Mon Oct 12 between 6:00 and 8:00 AM: moving west on W 116th Terrace from Grant Drive
   const SIGHT = [-94.69153, 38.91717];
   const SIGHT_HEADING = [[-94.69153,38.91717],[-94.69219,38.91737],[-94.69249,38.91744],[-94.69283,38.9174],[-94.69315,38.9173],[-94.69343,38.91718],[-94.69374,38.91704],[-94.69398,38.91696],[-94.6944,38.91692],[-94.69519,38.91692],[-94.69541,38.91695],[-94.69563,38.91705]];
+  // Possible sighting, Mon Oct 12 at 4:20 PM: Antioch Rd & 99th St, heading east into Pinehurst Estates (OpenStreetMap geometry)
+  const PINE = [-94.68625, 38.94893];
+  const PINE_HEADING = [[-94.68625,38.94893],[-94.68588,38.94893],[-94.68551,38.94896],[-94.68533,38.94901],[-94.68496,38.94914],[-94.68479,38.94923],[-94.6844,38.94948],[-94.68419,38.9496],[-94.68391,38.94972],[-94.68368,38.94978],[-94.68324,38.94984],[-94.68289,38.94983],[-94.6827,38.9498],[-94.68221,38.9497],[-94.68169,38.9496],[-94.68117,38.9495]];
   const SCHOOL = [-94.69900, 38.91900];
   const BRIDGE69 = [-94.70370, 38.92040];
   const HOME = [-94.67632, 38.94064];  // The Club at Indian Creek Apartment Homes (Google Maps)
@@ -1027,6 +1050,14 @@ if (CONFIG.showSearchBanner) {
       key: "all", time: `As of ${CONFIG.searchUpdated}`,
       title: "Where we've searched so far",
       body: ["Pawz at Play staff, volunteers, Sunday's owner and friends have been searching since Friday morning. Each shaded area has already been searched.", "That doesn't mean Sunday isn't there. It just means we've had people looking in the area.", "Tap Next to see the newest findings first, then each area."],
+    },
+    {
+      key: "pinehurst", time: "Monday, October 12, 4:20 PM",
+      title: "Possible sighting heading into Pinehurst Estates",
+      body: ["A driver heading south on Antioch Road reported a black Lab with a pink or red collar, matching Sunday's description, heading east on 99th Street into Pinehurst Estates.", "This is less than a mile from Sunday's home."],
+      sub: "If you live in or near Pinehurst Estates",
+      bullets: ["Please check your back yards, side yards, and under porches and decks, and keep an eye out."],
+      sighting: true,
     },
     {
       key: "grandview", time: "Monday, October 12",
@@ -1081,11 +1112,12 @@ if (CONFIG.showSearchBanner) {
     },
   ];
 
-  const ALL_BOUNDS = [[-94.7245, 38.9126], [-94.6725, 38.9435]];
+  const ALL_BOUNDS = [[-94.7245, 38.9126], [-94.6725, 38.9505]];
   function boundsOf(key) {
     if (key === "all" || key === "creek") return ALL_BOUNDS;
     const b = new maplibregl.LngLatBounds();
     if (key === "scent") { SCENT.forEach((pt) => b.extend(pt)); return b.toArray(); }
+    if (key === "pinehurst") { [PINE, ...PINE_HEADING, HOME].forEach((pt) => b.extend(pt)); return b.toArray(); }
     if (key === "grandview") { [...SCENT2.slice(6), ...AREAS.maybe.polys[0], ...SIGHT_HEADING].forEach((pt) => b.extend(pt)); return b.toArray(); }
     AREAS[key].polys.forEach((poly) => poly.forEach((pt) => b.extend(pt)));
     return b.toArray();
@@ -1224,6 +1256,14 @@ if (CONFIG.showSearchBanner) {
     smap.addSource("sighting", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: SIGHT_HEADING } } });
     smap.addLayer({ id: "sighting-line", type: "line", source: "sighting", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 3, "line-dasharray": [1.4, 1.2] } });
     tag("sighting small", "Possible sighting: Oct 12, 6–8 AM", "r", SIGHT);
+    // Newest possible sighting (Oct 12, 4:20 PM): full-size, pulsing marker with direction of travel
+    smap.addSource("pine", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: PINE_HEADING } } });
+    smap.addLayer({ id: "pine-halo", type: "line", source: "pine", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff", "line-width": 9, "line-opacity": 0.9 } });
+    smap.addLayer({ id: "pine-line", type: "line", source: "pine", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 4, "line-dasharray": [1.4, 1.2] } });
+    const pineEnd = tag("place", "Heading east into Pinehurst Estates", "r", PINE_HEADING[PINE_HEADING.length - 1]);
+    pineEnd.querySelector(".dot").outerHTML = '<span class="dot" style="width:0;height:0;border:0;background:none;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:13px solid #b24c1b;border-radius:0"></span>';
+    const pine = tag("sighting", "Possible sighting: Oct 12, 4:20 PM", "t", PINE);
+    pine.insertAdjacentHTML("afterbegin", '<span class="ring"></span>');
     sReady = true;
     sGoTo(sCur);
   });
