@@ -157,6 +157,24 @@
   .mk.home .lbl { color: var(--sunday); }
   .mk.tag.red .lbl { background: #cf3440; color: #fff; }
 
+  /* Latest update alert */
+  .alert { background: #b24c1b; color: #fff; border-radius: 18px; padding: clamp(22px, 4vw, 36px); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(178,76,27,.25); }
+  .alert-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .alert-eyebrow span:nth-child(2) { background: #fff; color: #b24c1b; padding: 3px 9px; border-radius: 999px; }
+  .alert .pulse { width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0 rgba(255,255,255,.7); animation: pulse 1.8s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 12px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+  .alert h2 { font-size: clamp(30px, 5.4vw, 52px); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 12px; max-width: 900px; }
+  .alert p { margin: 0 0 18px; font-size: 18px; max-width: 760px; color: #fdf1ea; }
+  .alert-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .a-btn { display: inline-flex; align-items: center; justify-content: center; padding: 13px 20px; border-radius: 12px; font-weight: 700; font-size: 16px; text-decoration: none; border: 2px solid #fff; }
+  .a-btn.light { background: #fff; color: #22201c; }
+  .a-btn.outline { color: #fff; }
+  .a-btn:hover { filter: brightness(.95); }
+  .a-btn:focus-visible { outline: 3px solid #ffd7c2; outline-offset: 3px; }
+  .mk.sighting .dot { width: 20px; height: 20px; background: #b24c1b; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
+  .mk.sighting .ring { position: absolute; width: 20px; height: 20px; transform: translate(-50%, -50%); border-radius: 50%; border: 2px solid #b24c1b; animation: ring 2.4s ease-out infinite; }
+  .mk.sighting .lbl { background: #b24c1b; color: #fff; }
+
   /* This is Sunday (photos) */
   .meet { display: grid; grid-template-columns: minmax(220px, 1fr) 2fr; gap: 24px; align-items: center; margin-bottom: 36px; }
   .meet h2 { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
@@ -214,13 +232,24 @@
     .dlg-foot { position: sticky; bottom: 0; background: #fff; border-top: 1px solid var(--hair); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mk.last .ring { animation: none; opacity: 0; }
+    .mk.last .ring, .mk.sighting .ring { animation: none; opacity: 0; }
+    .alert .pulse { animation: none; }
     .plan .fp-move, .plan .fade { transition: none; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <section class="alert" id="alert" aria-labelledby="alertTitle" hidden>
+    <p class="alert-eyebrow"><span class="pulse" aria-hidden="true"></span><span>Update</span><span id="alertDate"></span></p>
+    <h2 id="alertTitle"></h2>
+    <p id="alertBody"></p>
+    <div class="alert-actions">
+      <a class="a-btn light" href="#search" id="alertMap">See it on the map</a>
+      <a class="a-btn outline" id="alertCall" hidden></a>
+    </div>
+  </section>
 
   <div class="banner" id="banner" hidden></div>
 
@@ -426,6 +455,14 @@ const CONFIG = {
   sightingsPhone: "913-530-7596",  // blank shows a placeholder
   dogPhotoUrl: "",             // optional photo of Sunday for the banner
   searchUpdated: "October 11, 2026",  // shown on "Where the search stands"
+  // Big alert card at the top of the page. Set to null to hide it.
+  latestUpdate: {
+    date: "As of Monday, October 12",
+    title: "Possible Sunday sighting at 116th and Grant Drive",
+    body: "If you live or walk near 116th Street and Grant Drive, please check your yard and keep watch. If you see Sunday, don't chase or call out to her. Call us right away.",
+    mapLabel: "Possible sighting, Oct 12",
+    lngLat: [-94.69137, 38.91905],  // W 116th St & Grant Dr
+  },
 };
 
 // Photos of Sunday (files in the sunday-photos folder next to this page)
@@ -577,6 +614,21 @@ if (CONFIG.showSearchBanner) {
   b.innerHTML = `${CONFIG.dogPhotoUrl ? `<img src="${esc(CONFIG.dogPhotoUrl)}" alt="Sunday">` : ""}
     <div><strong>Have you seen Sunday?</strong>
     <p>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.</p></div>`;
+}
+
+// Latest update alert
+if (CONFIG.latestUpdate) {
+  const u = CONFIG.latestUpdate;
+  $("alert").hidden = false;
+  $("alertDate").textContent = u.date;
+  $("alertTitle").textContent = u.title;
+  $("alertBody").textContent = u.body;
+  if (CONFIG.sightingsPhone) {
+    $("alertCall").hidden = false;
+    $("alertCall").href = telHref();
+    $("alertCall").textContent = `Call ${CONFIG.sightingsPhone}`;
+  }
+  $("alertMap").addEventListener("click", () => window.focusSighting && window.focusSighting());
 }
 
 // Text timeline (same data as the map)
@@ -1087,6 +1139,14 @@ if (CONFIG.showSearchBanner) {
     `<p><b>${esc(s.title)}.</b> ${[...(s.body || []), ...(s.bullets || [])].map(esc).join(" ")}</p>`).join("");
   renderS(0);
 
+  // "See it on the map" in the alert card zooms here
+  window.focusSighting = () => {
+    const u = CONFIG.latestUpdate;
+    if (!u || !u.lngLat) return;
+    const go = () => smap.flyTo({ center: u.lngLat, zoom: 16, duration: reduceMotion ? 0 : 1600, essential: true });
+    sReady ? setTimeout(go, 400) : smap.once("load", () => setTimeout(go, 400));
+  };
+
   smap.on("load", () => {
     smap.setPadding(sPadding());
     for (const [k, a] of Object.entries(AREAS)) {
@@ -1109,6 +1169,10 @@ if (CONFIG.showSearchBanner) {
     tag("place", "US-69 bridge", "l", BRIDGE69);
     tag("home", "Sunday's home", "l", HOME);
     tag("tag red", "Not searched yet", "b", [-94.71300, 38.91590]);
+    if (CONFIG.latestUpdate && CONFIG.latestUpdate.lngLat) {
+      const el = tag("sighting", CONFIG.latestUpdate.mapLabel, "r", CONFIG.latestUpdate.lngLat);
+      el.insertAdjacentHTML("afterbegin", '<span class="ring"></span>');
+    }
     sReady = true;
     sGoTo(sCur);
   });
