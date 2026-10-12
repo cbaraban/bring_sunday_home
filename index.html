@@ -459,9 +459,12 @@ const CONFIG = {
   latestUpdate: {
     date: "As of Monday, October 12",
     title: "Possible Sunday sighting at 116th and Grant Drive",
-    body: "If you live or walk near 116th Street and Grant Drive, please check your yard and keep watch. If you see Sunday, call us right away.",
+    body: "Sunday was seen moving westbound on 116th Terrace. If you live or walk nearby, please check your yard and keep watch. If you see Sunday, call us right away.",
     mapLabel: "Possible sighting, Oct 12",
-    lngLat: [-94.69137, 38.91905],  // W 116th St & Grant Dr
+    lngLat: [-94.69153, 38.91717],  // W 116th Terrace & Grant Dr
+    // Direction she was moving: west along W 116th Terrace (OpenStreetMap geometry)
+    heading: [[-94.69153,38.91717],[-94.69219,38.91737],[-94.69249,38.91744],[-94.69283,38.9174],[-94.69315,38.9173],[-94.69343,38.91718],[-94.69374,38.91704],[-94.69398,38.91696],[-94.6944,38.91692],[-94.69519,38.91692],[-94.69541,38.91695],[-94.69563,38.91705]],
+    headingLabel: "Heading west on 116th Terrace",
   },
 };
 
@@ -1143,7 +1146,11 @@ if (CONFIG.showSearchBanner) {
   window.focusSighting = () => {
     const u = CONFIG.latestUpdate;
     if (!u || !u.lngLat) return;
-    const go = () => smap.flyTo({ center: u.lngLat, zoom: 16, duration: reduceMotion ? 0 : 1600, essential: true });
+    const b = new maplibregl.LngLatBounds(u.lngLat, u.lngLat);
+    (u.heading || []).forEach((pt) => b.extend(pt));
+    // leave room for the labels on either side of the line
+    const pad = narrow() ? { top: 50, bottom: 50, left: 70, right: 90 } : { top: 70, bottom: 70, left: 200, right: 180 };
+    const go = () => smap.fitBounds(b, { padding: pad, maxZoom: 16.5, duration: reduceMotion ? 0 : 1600, essential: true });
     sReady ? setTimeout(go, 400) : smap.once("load", () => setTimeout(go, 400));
   };
 
@@ -1170,7 +1177,16 @@ if (CONFIG.showSearchBanner) {
     tag("home", "Sunday's home", "l", HOME);
     tag("tag red", "Not searched yet", "b", [-94.71300, 38.91590]);
     if (CONFIG.latestUpdate && CONFIG.latestUpdate.lngLat) {
-      const el = tag("sighting", CONFIG.latestUpdate.mapLabel, "r", CONFIG.latestUpdate.lngLat);
+      const u = CONFIG.latestUpdate;
+      if (u.heading) {
+        smap.addSource("sighting", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: u.heading } } });
+        smap.addLayer({ id: "sighting-halo", type: "line", source: "sighting", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff", "line-width": 9, "line-opacity": 0.9 } });
+        smap.addLayer({ id: "sighting-line", type: "line", source: "sighting", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 4, "line-dasharray": [1.4, 1.2] } });
+        const end = u.heading[u.heading.length - 1];
+        const arrow = tag("place arrow", u.headingLabel, "l", end);
+        arrow.querySelector(".dot").outerHTML = '<span class="dot" style="width:0;height:0;border:0;background:none;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:13px solid #b24c1b;border-radius:0"></span>';
+      }
+      const el = tag("sighting", u.mapLabel, "r", u.lngLat);
       el.insertAdjacentHTML("afterbegin", '<span class="ring"></span>');
     }
     sReady = true;
