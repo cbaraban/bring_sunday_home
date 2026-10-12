@@ -1015,7 +1015,7 @@ if (CONFIG.showSearchBanner) {
   // Scent dogs, Mon Oct 12: Pawz at Play -> DoubleTree -> Grant Drive -> east on College to Grandview Drive
   const SCENT2 = [[-94.70105,38.92632],[-94.7012,38.92664],[-94.7015,38.92672],[-94.70185,38.9267],[-94.70212,38.92706],[-94.7024,38.92745],[-94.70262,38.9279],[-94.7015,38.92776],[-94.7,38.92772],[-94.6985,38.9277],[-94.697,38.9277],[-94.6962,38.92775],[-94.694,38.92769],[-94.69148,38.92763]];
   const GRANDVIEW = [-94.69148, 38.92763];  // College Blvd & Grandview Dr
-  // Possible sighting, Mon Oct 12: moving west on W 116th Terrace from Grant Drive
+  // Possible sighting, Mon Oct 12 between 6:00 and 8:00 AM: moving west on W 116th Terrace from Grant Drive
   const SIGHT = [-94.69153, 38.91717];
   const SIGHT_HEADING = [[-94.69153,38.91717],[-94.69219,38.91737],[-94.69249,38.91744],[-94.69283,38.9174],[-94.69315,38.9173],[-94.69343,38.91718],[-94.69374,38.91704],[-94.69398,38.91696],[-94.6944,38.91692],[-94.69519,38.91692],[-94.69541,38.91695],[-94.69563,38.91705]];
   const SCHOOL = [-94.69900, 38.91900];
@@ -1031,7 +1031,7 @@ if (CONFIG.showSearchBanner) {
     {
       key: "grandview", time: "Monday, October 12",
       title: "Scent dogs track Sunday east to Grandview Drive",
-      body: ["Three scent dogs followed Sunday's scent from Pawz at Play to the DoubleTree hotel, up to Grant Drive, then east along College Boulevard to Grandview Drive, where the scent stops.", "The purple area shows where Sunday may be, based on what the scent dogs found. This is a possibility, not a certainty. Someone may also have picked her up."],
+      body: ["Three scent dogs followed Sunday's scent from Pawz at Play to the DoubleTree hotel, up to Grant Drive, then east along College Boulevard to Grandview Drive, where the scent stops.", "The purple area shows where Sunday may be, based on what the scent dogs found. This is a possibility, not a certainty. Someone may also have picked her up.", "There was also a possible sighting between 6:00 and 8:00 AM on October 12, at Grant Drive and 116th Terrace, heading west."],
       sub: "Out walking in the evening?",
       bullets: ["Please keep an eye out between Grandview Drive and Antioch Road, from College Boulevard to 116th Terrace."],
       sighting: true,
@@ -1086,7 +1086,7 @@ if (CONFIG.showSearchBanner) {
     if (key === "all" || key === "creek") return ALL_BOUNDS;
     const b = new maplibregl.LngLatBounds();
     if (key === "scent") { SCENT.forEach((pt) => b.extend(pt)); return b.toArray(); }
-    if (key === "grandview") { [...SCENT2.slice(6), ...AREAS.maybe.polys[0]].forEach((pt) => b.extend(pt)); return b.toArray(); }
+    if (key === "grandview") { [...SCENT2.slice(6), ...AREAS.maybe.polys[0], ...SIGHT_HEADING].forEach((pt) => b.extend(pt)); return b.toArray(); }
     AREAS[key].polys.forEach((poly) => poly.forEach((pt) => b.extend(pt)));
     return b.toArray();
   }
@@ -1159,7 +1159,7 @@ if (CONFIG.showSearchBanner) {
     renderS(i);
     if (!sReady) return;
     emphasize(SSTEPS[i].key);
-    smap.fitBounds(boundsOf(SSTEPS[i].key), { padding: 30, maxZoom: 16.3, duration: reduceMotion ? 0 : 1300, essential: true });
+    smap.fitBounds(boundsOf(SSTEPS[i].key), { padding: { top: 30, left: 30, right: 30, bottom: narrow() ? 30 : 70 }, maxZoom: 16.3, duration: reduceMotion ? 0 : 1300, essential: true });
   }
 
   // Controls
@@ -1223,7 +1223,7 @@ if (CONFIG.showSearchBanner) {
     // Possible sighting (Oct 12), smaller marker with her direction of travel
     smap.addSource("sighting", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: SIGHT_HEADING } } });
     smap.addLayer({ id: "sighting-line", type: "line", source: "sighting", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 3, "line-dasharray": [1.4, 1.2] } });
-    tag("sighting small", "Possible sighting, Oct 12", "r", SIGHT);
+    tag("sighting small", "Possible sighting: Oct 12, 6–8 AM", "r", SIGHT);
     sReady = true;
     sGoTo(sCur);
   });
