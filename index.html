@@ -70,12 +70,11 @@
   .site-nav a:focus-visible, .head-call:focus-visible, .brand:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
 
   /* Printable flyer */
-  .flyer { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 10px 14px 10px 10px; background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; text-decoration: none; color: var(--ink); max-width: 360px; }
-  .flyer:hover { border-color: #cfc8bd; }
-  .flyer:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
-  .flyer img { width: 64px; height: auto; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,.2); flex: none; }
-  .flyer strong { display: block; color: var(--sunday); }
-  .flyer small { display: block; color: var(--muted); font-size: 13px; line-height: 1.35; }
+  .flyer { margin-top: 16px; }
+  .flyer-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--sunday); color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; padding: 12px 18px; border-radius: 10px; }
+  .flyer-btn:hover { background: #bf5623; }
+  .flyer-btn:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
+  .flyer-sub { margin: 8px 0 0 !important; font-size: 14px; color: var(--muted); }
   .card-link { margin-top: 8px !important; font-weight: 600; }
   .card-link a { color: var(--sunday); }
   a.share-btn { text-decoration: none; display: inline-block; color: var(--ink) !important; }
@@ -330,10 +329,13 @@
     <div>
       <h2 id="meetTitle">This is Sunday</h2>
       <p>Sunday has a black coat, a graying muzzle and brown eyes. Tap a photo to see it larger.</p>
-      <a class="flyer" href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">
-        <img src="sunday-photos/flyer-preview.jpg" alt="" width="64" height="83">
-        <span><strong>Download the printable flyer</strong><small>PDF, 8.5 &times; 11 in. Print it, post it, or hand it out.</small></span>
-      </a>
+      <div class="flyer">
+        <a class="flyer-btn" href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
+          Download the printable flyer
+        </a>
+        <p class="flyer-sub">PDF, 8.5 &times; 11 in. Print it, post it, send it, or hand it out.</p>
+      </div>
     </div>
     <div class="gallery" id="gallery"></div>
   </section>
