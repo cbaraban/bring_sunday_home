@@ -49,8 +49,35 @@
   .banner p { margin: 2px 0 0; color: var(--muted); }
   .placeholder { background: #fff3c4; color: #6b5200; padding: 0 4px; border-radius: 4px; font-weight: 600; }
 
-  header h1 { font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0 0 6px; letter-spacing: -.01em; }
-  header p { margin: 0 0 20px; color: var(--muted); max-width: 640px; }
+  .sec-head .sec { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 4px; letter-spacing: -.01em; }
+  .sec-head p { margin: 0 0 20px; color: var(--muted); max-width: 640px; }
+  .sec-head .sub-date { margin: 0 0 8px; font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--sunday); }
+  .journey { margin-top: 56px; }
+  .journey-link { margin: 16px 0 0; font-weight: 600; }
+  .journey-link a { color: var(--sunday); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Site header */
+  html { scroll-padding-top: 76px; }
+  .site-head { position: sticky; top: 0; z-index: 50; background: rgba(250,248,245,.94); backdrop-filter: saturate(1.4) blur(8px); -webkit-backdrop-filter: saturate(1.4) blur(8px); border-bottom: 1px solid var(--hair); }
+  .site-head-in { max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 20px; }
+  .brand { font-weight: 800; font-size: 18px; color: var(--ink); text-decoration: none; letter-spacing: -.01em; white-space: nowrap; }
+  .site-nav { display: flex; gap: 4px; flex: 1; }
+  .site-nav a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; padding: 8px 12px; border-radius: 8px; white-space: nowrap; }
+  .site-nav a:hover { background: #efebe5; }
+  .head-call { background: var(--sunday); color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 10px 16px; border-radius: 10px; white-space: nowrap; }
+  .head-call:hover { background: #bf5623; }
+  .site-nav a:focus-visible, .head-call:focus-visible, .brand:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
+
+  /* Share + footer */
+  .share-btn { font: inherit; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--hair); border-radius: 10px; padding: 10px 16px; cursor: pointer; }
+  .share-btn:hover { border-color: #cfc8bd; }
+  button.a-btn { font: inherit; font-weight: 700; font-size: 16px; background: transparent; cursor: pointer; }
+  .site-foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--hair); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-end; color: var(--muted); font-size: 15px; }
+  .site-foot p { margin: 0 0 4px; }
+  .site-foot .foot-updated { font-weight: 600; color: var(--ink); }
+  .site-foot a { color: var(--sunday); font-weight: 600; }
+  .foot-actions { display: flex; gap: 14px; align-items: center; }
 
   /* Map stage */
   .stage { position: relative; height: min(76vh, 660px); min-height: 520px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--hair); background: #eceae6; box-shadow: var(--shadow); }
@@ -134,12 +161,9 @@
   .dlg-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 22px 20px; }
 
   /* Jump links */
-  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 20px; }
-  .jump a { font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; background: var(--surface); border: 1px solid var(--hair); border-radius: 999px; padding: 6px 12px; }
-  .jump a:hover { border-color: #cfc8bd; }
 
   /* Search section */
-  .section-search { margin-top: 56px; scroll-margin-top: 16px; }
+  .section-search { margin-top: 40px; }
   .section-search .sec { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
   .section-search .lede { margin: 0 0 20px; color: var(--muted); max-width: 680px; }
   .updated { display: inline-block; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--hair); border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }
@@ -208,7 +232,7 @@
   .photo-dlg .dlg-close { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,.55); color: #fff; }
 
   /* What happens next */
-  .next { margin-top: 56px; scroll-margin-top: 16px; }
+  .next { margin-top: 56px; }
   .next .sec { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
   .next-list { list-style: none; padding: 0; margin: 16px 0 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .next-list li { display: flex; gap: 14px; background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); padding: 18px; }
@@ -226,6 +250,7 @@
   /* Persistent call button */
   .call-fab { position: fixed; right: 20px; bottom: 20px; z-index: 40; display: inline-flex; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 999px; background: var(--sunday); color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; box-shadow: 0 6px 20px rgba(212,98,42,.35), 0 2px 6px rgba(0,0,0,.15); }
   .call-fab:hover { background: #bf5623; }
+  @media (min-width: 761px) { .call-fab { display: none !important; } body.has-call .wrap { padding-bottom: 56px !important; } }
   .call-fab:focus-visible { outline: 3px solid #f0b48f; outline-offset: 3px; }
   .call-fab .num { font-weight: 500; opacity: .9; padding-left: 10px; border-left: 1px solid rgba(255,255,255,.4); }
   .call-fab .placeholder { color: #6b5200; }
@@ -243,6 +268,13 @@
     .call-fab { left: 12px; right: 12px; bottom: 12px; justify-content: center; }
     .call-fab .num { display: none; }
     .next-list { grid-template-columns: 1fr; }
+    html { scroll-padding-top: 104px; }
+    .site-head-in { flex-wrap: wrap; gap: 6px 12px; padding: 8px 12px; }
+    .brand { font-size: 16px; flex: 1; }
+    .head-call { display: none; }
+    .site-nav { order: 3; flex-basis: 100%; overflow-x: auto; scrollbar-width: none; margin: 0 -12px; padding: 0 8px; }
+    .site-nav::-webkit-scrollbar { display: none; }
+    .site-nav a { font-size: 14px; padding: 6px 10px; background: var(--surface); border: 1px solid var(--hair); border-radius: 999px; }
     .meet { grid-template-columns: 1fr; gap: 14px; }
     .gallery { gap: 6px; grid-template-columns: repeat(2, 1fr); }
     .dlg-foot { position: sticky; bottom: 0; background: #fff; border-top: 1px solid var(--hair); }
@@ -254,8 +286,20 @@
   }
 </style>
 </head>
-<body>
+<body id="top">
+<header class="site-head">
+  <div class="site-head-in">
+    <a class="brand" href="#top">Bring Sunday Home</a>
+    <nav class="site-nav" aria-label="On this page">
+      <a href="#search">Latest information</a>
+      <a href="#next">What happens next</a>
+      <a href="#journey">Sunday's escape journey</a>
+    </nav>
+    <a class="head-call" id="headCall" hidden>Report a sighting</a>
+  </div>
+</header>
 <div class="wrap">
+  <h1 class="visually-hidden">Help bring Sunday home</h1>
 
   <section class="alert" id="alert" aria-labelledby="alertTitle" hidden>
     <p class="alert-eyebrow"><span class="pulse" aria-hidden="true"></span><span>Update</span><span id="alertDate"></span><span class="reward-pill" id="alertReward" hidden></span></p>
@@ -264,6 +308,7 @@
     <div class="alert-actions">
       <a class="a-btn light" href="#search" id="alertMap">See it on the map</a>
       <a class="a-btn outline" id="alertCall" hidden></a>
+      <button class="a-btn outline" type="button" data-share>Share this page</button>
     </div>
     <div class="earlier" id="alertEarlier" hidden></div>
   </section>
@@ -278,44 +323,10 @@
     <div class="gallery" id="gallery"></div>
   </section>
 
-  <header>
-    <h1>Sunday's path on Friday morning, October 9</h1>
-    <p>This map follows what we know about Sunday's route after she left Pawz at Play. Tap <b>Next</b> to step through it.</p>
-  </header>
-  <nav class="jump" aria-label="On this page">
-    <a href="#search">Where the search stands &darr;</a>
-    <a href="#next">What happens next &darr;</a>
-  </nav>
-
-  <section class="stage" aria-label="Interactive map of Sunday's route">
-    <div id="map" class="map-el" role="img" aria-label="Map of the area around College Boulevard and Mastin Street, Overland Park, Kansas, showing Sunday's route. The same information is in the text timeline below the map."></div>
-    <button class="fit-btn" id="fitBtn" type="button">Show whole area</button>
-    <article class="card" aria-live="polite">
-      <div class="progress" id="progress" role="group" aria-label="Choose a step"></div>
-      <div class="card-body" id="cardBody"></div>
-      <div class="card-foot">
-        <button class="btn" id="prevBtn" type="button">Back</button>
-        <span class="count" id="count"></span>
-        <button class="btn primary" id="nextBtn" type="button">Next</button>
-      </div>
-    </article>
-  </section>
-
-  <div class="legend" aria-hidden="true">
-    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#d4622a" stroke-width="5" stroke-linecap="round"/></svg>Seen by our team or a witness</span>
-    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#d4622a" stroke-width="4" stroke-dasharray="5 5" stroke-linecap="round" opacity=".75"/></svg>Most likely path, not seen</span>
-    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#34679e" stroke-width="3" stroke-dasharray="1 5" stroke-linecap="round"/></svg>Pawz at Play team</span>
-  </div>
-
-  <details class="text-timeline">
-    <summary>Read the full timeline as text</summary>
-    <ol id="textTimeline"></ol>
-  </details>
-
   <section class="section-search" id="search" aria-labelledby="searchTitle">
     <span class="updated" id="updatedTag"></span>
     <h2 class="sec" id="searchTitle">Where the search stands</h2>
-    <p class="lede"><b>Newest:</b> a possible sighting at 4:20 PM on October 12, at 99th Street and Antioch Road, heading east into Pinehurst Estates. Purple shows where Sunday may be: east of Grandview Drive, based on what scent dogs found on October 12. Other shaded areas have already been searched, but that doesn't mean Sunday isn't there. It just means people have been looking in those areas.</p>
+    <p class="lede">The map opens on the newest update. Tap through to see each sighting and search area. Searched areas don't mean Sunday isn't there.</p>
 
     <div class="stage">
       <div id="searchMap" class="map-el" role="img" aria-label="Map of Indian Creek and the surrounding neighborhoods in Overland Park, Kansas, showing which areas have been searched for Sunday. The same information is in the text summary below the map."></div>
@@ -376,7 +387,54 @@
       </li>
     </ol>
     <div class="next-cta" id="nextCta" hidden></div>
+    <p class="journey-link">Want to know how this started? <a href="#journey">See Sunday's escape journey &darr;</a></p>
   </section>
+
+  <section class="journey" id="journey" aria-labelledby="journeyTitle">
+  <div class="sec-head">
+    <h2 class="sec" id="journeyTitle">Sunday's escape journey</h2>
+    <p class="sub-date">Friday morning, October 9</p>
+    <p>This map follows what we know about Sunday's route after she left Pawz at Play. Tap <b>Next</b> to step through it.</p>
+  </div>
+
+  <section class="stage" aria-label="Interactive map of Sunday's route">
+    <div id="map" class="map-el" role="img" aria-label="Map of the area around College Boulevard and Mastin Street, Overland Park, Kansas, showing Sunday's route. The same information is in the text timeline below the map."></div>
+    <button class="fit-btn" id="fitBtn" type="button">Show whole area</button>
+    <article class="card" aria-live="polite">
+      <div class="progress" id="progress" role="group" aria-label="Choose a step"></div>
+      <div class="card-body" id="cardBody"></div>
+      <div class="card-foot">
+        <button class="btn" id="prevBtn" type="button">Back</button>
+        <span class="count" id="count"></span>
+        <button class="btn primary" id="nextBtn" type="button">Next</button>
+      </div>
+    </article>
+  </section>
+
+  <div class="legend" aria-hidden="true">
+    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#d4622a" stroke-width="5" stroke-linecap="round"/></svg>Seen by our team or a witness</span>
+    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#d4622a" stroke-width="4" stroke-dasharray="5 5" stroke-linecap="round" opacity=".75"/></svg>Most likely path, not seen</span>
+    <span><svg width="34" height="8"><line x1="2" y1="4" x2="32" y2="4" stroke="#34679e" stroke-width="3" stroke-dasharray="1 5" stroke-linecap="round"/></svg>Pawz at Play team</span>
+  </div>
+
+  <details class="text-timeline">
+    <summary>Read the full timeline as text</summary>
+    <ol id="textTimeline"></ol>
+  </details>
+  </section>
+
+  <footer class="site-foot">
+    <div>
+      <p class="foot-updated" id="footUpdated"></p>
+      <p>Pawz at Play &middot; 11200 Mastin Street, Overland Park, KS 66210</p>
+      <p>Report a sighting: <span id="footPhone"></span></p>
+    </div>
+    <div class="foot-actions">
+      <button class="share-btn" type="button" data-share>Share this page</button>
+      <a class="top-link" href="#top">Back to top &uarr;</a>
+    </div>
+  </footer>
+
 </div>
 
 <a class="call-fab" id="callFab" hidden>
@@ -480,6 +538,7 @@ const CONFIG = {
   sightingsPhone: "913-530-7596",  // blank shows a placeholder
   dogPhotoUrl: "",             // optional photo of Sunday for the banner
   searchUpdated: "October 13, 2026",  // shown on "Where the search stands"
+  lastUpdated: "Tuesday, October 13, 2026",  // shown in the footer
   reward: "$3,000 reward for Sunday's safe return",  // blank hides the reward everywhere
   // Big alert card at the top of the page. Set to null to hide it.
   latestUpdate: {
@@ -820,7 +879,7 @@ function renderCard(i) {
   const sighting = s.sighting && CONFIG.showSearchBanner
     ? `<div class="callout"><strong>If you see Sunday</strong>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.</div>`
     : "";
-  const searchLink = s.searchLink ? `<p><a href="#search" class="search-link" id="searchLink">See where the search stands &darr;</a></p>` : "";
+  const searchLink = s.searchLink ? `<p><a href="#search" class="search-link" id="searchLink">See the latest information &uarr;</a></p>` : "";
   $("cardBody").innerHTML = `<p class="eyebrow">${esc(s.time)}</p><h2>${esc(s.title)}</h2>${s.body.map((p) => `<p>${esc(p)}</p>`).join("")}${searchLink}${unseenNote}${more}${sighting}`;
   if (s.searchLink) $("searchLink").addEventListener("click", () => window.focusSearchStep && window.focusSearchStep("grandview"));
   if (s.more) $("moreBtn").addEventListener("click", openHow);
@@ -912,8 +971,10 @@ STEPS.forEach((s, j) => {
 $("prevBtn").addEventListener("click", () => current > 0 && goTo(current - 1));
 $("nextBtn").addEventListener("click", () => goTo(current === STEPS.length - 1 ? 0 : current + 1));
 $("fitBtn").addEventListener("click", () => moveCamera({ bounds: [P.pawz, P.lucky, P.doubletree, P.grantN, [-94.69645, 38.92560]] }));
+let journeyOnScreen = false;
+new IntersectionObserver((es) => { journeyOnScreen = es[0].isIntersecting; }).observe($("map"));
 document.addEventListener("keydown", (e) => {
-  if ($("howDialog").open || $("photoDialog").open || /input|textarea/i.test(e.target.tagName)) return;
+  if (!journeyOnScreen || $("howDialog").open || $("photoDialog").open || /input|textarea/i.test(e.target.tagName)) return;
   if (e.key === "ArrowRight" && current < STEPS.length - 1) goTo(current + 1);
   if (e.key === "ArrowLeft" && current > 0) goTo(current - 1);
 });
@@ -991,6 +1052,34 @@ $("howNext").addEventListener("click", () => {
 });
 $("howDialog").querySelector("[data-close]").addEventListener("click", () => $("howDialog").close());
 $("howDialog").addEventListener("click", (e) => { if (e.target === $("howDialog")) $("howDialog").close(); });
+
+/* ---------------- Header call button, footer, share ---------------- */
+if (CONFIG.sightingsPhone) {
+  $("headCall").hidden = false;
+  $("headCall").href = telHref();
+  $("headCall").textContent = `Report a sighting \u00b7 ${CONFIG.sightingsPhone}`;
+}
+$("footUpdated").textContent = `Last updated ${CONFIG.lastUpdated}`;
+$("footPhone").innerHTML = phoneHTML();
+const SHARE = {
+  title: "Help Bring Sunday Home",
+  text: CONFIG.reward ? `Sunday is missing in Overland Park, KS. ${CONFIG.reward}.` : "Sunday is missing in Overland Park, KS.",
+  url: "https://www.bringsundayhome.com/",
+};
+document.querySelectorAll("[data-share]").forEach((btn) => btn.addEventListener("click", async () => {
+  if (navigator.share) {
+    try { await navigator.share(SHARE); } catch (e) { /* closed the share sheet */ }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(SHARE.url);
+    const label = btn.textContent;
+    btn.textContent = "Link copied";
+    setTimeout(() => (btn.textContent = label), 2000);
+  } catch (e) {
+    window.prompt("Copy this link to share:", SHARE.url);
+  }
+}));
 
 /* ---------------- Persistent call button ---------------- */
 if (CONFIG.showSearchBanner) {
