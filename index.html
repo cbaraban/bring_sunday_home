@@ -69,6 +69,17 @@
   .head-call:hover { background: #bf5623; }
   .site-nav a:focus-visible, .head-call:focus-visible, .brand:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
 
+  /* Printable flyer */
+  .flyer { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 10px 14px 10px 10px; background: var(--surface); border: 1px solid var(--hair); border-radius: 12px; text-decoration: none; color: var(--ink); max-width: 360px; }
+  .flyer:hover { border-color: #cfc8bd; }
+  .flyer:focus-visible { outline: 3px solid #f0b48f; outline-offset: 2px; }
+  .flyer img { width: 64px; height: auto; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,.2); flex: none; }
+  .flyer strong { display: block; color: var(--sunday); }
+  .flyer small { display: block; color: var(--muted); font-size: 13px; line-height: 1.35; }
+  .card-link { margin-top: 8px !important; font-weight: 600; }
+  .card-link a { color: var(--sunday); }
+  a.share-btn { text-decoration: none; display: inline-block; color: var(--ink) !important; }
+
   /* Share + footer */
   .share-btn { font: inherit; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--hair); border-radius: 10px; padding: 10px 16px; cursor: pointer; }
   .share-btn:hover { border-color: #cfc8bd; }
@@ -77,7 +88,7 @@
   .site-foot p { margin: 0 0 4px; }
   .site-foot .foot-updated { font-weight: 600; color: var(--ink); }
   .site-foot a { color: var(--sunday); font-weight: 600; }
-  .foot-actions { display: flex; gap: 14px; align-items: center; }
+  .foot-actions { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
 
   /* Map stage */
   .stage { position: relative; height: min(76vh, 660px); min-height: 520px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--hair); background: #eceae6; box-shadow: var(--shadow); }
@@ -319,6 +330,10 @@
     <div>
       <h2 id="meetTitle">This is Sunday</h2>
       <p>Sunday has a black coat, a graying muzzle and brown eyes. Tap a photo to see it larger.</p>
+      <a class="flyer" href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">
+        <img src="sunday-photos/flyer-preview.jpg" alt="" width="64" height="83">
+        <span><strong>Download the printable flyer</strong><small>PDF, 8.5 &times; 11 in. Print it, post it, or hand it out.</small></span>
+      </a>
     </div>
     <div class="gallery" id="gallery"></div>
   </section>
@@ -375,6 +390,7 @@
           <p class="when">Spreading the word</p>
           <h3>Ads and flyers</h3>
           <p>We're starting a Facebook and Instagram ad campaign about Sunday and the reward, and handing out tri-fold flyers in Shannon Valley and surrounding neighborhoods.</p>
+          <p class="card-link"><a href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">Download the printable flyer (PDF) &darr;</a></p>
         </div>
       </li>
       <li>
@@ -430,6 +446,7 @@
       <p>Report a sighting: <span id="footPhone"></span></p>
     </div>
     <div class="foot-actions">
+      <a class="share-btn" href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">Download flyer (PDF)</a>
       <button class="share-btn" type="button" data-share>Share this page</button>
       <a class="top-link" href="#top">Back to top &uarr;</a>
     </div>
