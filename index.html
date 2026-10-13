@@ -491,7 +491,7 @@ const CONFIG = {
     ],
     mapStep: "pinehurst",  // "See it on the map" opens this step of the search map
   },
-  // Shown under the top card as "Earlier updates". Always use the actual date (e.g. "Monday, October 12"),
+  // Shown under the top card as "Earlier updates", newest first. Always use the actual date (e.g. "Monday, October 12"),
   // never "today" or "yesterday", since the page stays up for days.
   earlierUpdates: [
     { date: "Monday, October 12", title: "Scent dogs tracked Sunday east to Grandview Drive", mapStep: "grandview" },
@@ -1049,12 +1049,9 @@ if (CONFIG.showSearchBanner) {
   const BRIDGE69 = [-94.70370, 38.92040];
   const HOME = [-94.67632, 38.94064];  // The Club at Indian Creek Apartment Homes (Google Maps)
 
+  // ORDER RULE: newest dated update first, then earlier updates (newest to oldest),
+  // then the overview and the reference areas. The map opens on step 1.
   const SSTEPS = [
-    {
-      key: "all", time: `As of ${CONFIG.searchUpdated}`,
-      title: "Where we've searched so far",
-      body: ["Pawz at Play staff, volunteers, Sunday's owner and friends have been searching since Friday morning, October 9. Each shaded area has already been searched.", "That doesn't mean Sunday isn't there. It just means we've had people looking in the area.", "Tap Next to see the newest findings first, then each area."],
-    },
     {
       key: "pinehurst", time: "Monday, October 12, 4:20 PM",
       title: "Possible sighting heading into Pinehurst Estates",
@@ -1070,6 +1067,11 @@ if (CONFIG.showSearchBanner) {
       sub: "Out walking in the evening?",
       bullets: ["Please keep an eye out between Grandview Drive and Antioch Road, from College Boulevard to 116th Terrace."],
       sighting: true,
+    },
+    {
+      key: "all", time: `As of ${CONFIG.searchUpdated}`,
+      title: "Where we've searched so far",
+      body: ["Pawz at Play staff, volunteers, Sunday's owner and friends have been searching since Friday morning, October 9. Each shaded area has already been searched.", "That doesn't mean Sunday isn't there. It just means we've had people looking in the area.", "Tap Next to see each area."],
     },
     {
       key: "creek", time: "A source of water",
@@ -1208,7 +1210,7 @@ if (CONFIG.showSearchBanner) {
   $("sNext").addEventListener("click", () => sGoTo(sCur === SSTEPS.length - 1 ? 0 : sCur + 1));
   $("sFit").addEventListener("click", () => smap.fitBounds(ALL_BOUNDS, { padding: 30, duration: reduceMotion ? 0 : 1000 }));
   $("updatedTag").textContent = `Updated ${CONFIG.searchUpdated}`;
-  $("searchText").innerHTML = SSTEPS.slice(1).map((s) =>
+  $("searchText").innerHTML = SSTEPS.filter((st) => st.key !== "all").map((s) =>
     `<p><b>${esc(s.title)}.</b> ${[...(s.body || []), ...(s.bullets || [])].map(esc).join(" ")}</p>`).join("");
   renderS(0);
 
