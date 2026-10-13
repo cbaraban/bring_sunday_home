@@ -182,6 +182,8 @@
   .mk.scentstop .dot { width: 14px; height: 14px; background: #e0447c; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
   .mk.scentstop .lbl { color: #b8285e; }
   .mk.tag.purple .lbl { background: #7b4fd0; color: #fff; }
+  .mk.tag.pinearea .lbl { background: #b24c1b; color: #fff; font-size: 13px; }
+  .mk.tag.pinearea .dot { display: none; }
   .mk.sighting.small .dot { width: 12px; height: 12px; border-width: 2px; }
   .mk.sighting.small .lbl { font-size: 11.5px; }
   .mk.sighting .dot { width: 20px; height: 20px; background: #b24c1b; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
@@ -1021,6 +1023,7 @@ if (CONFIG.showSearchBanner) {
     maybe:  { color: "#7b4fd0", fill: 0.20, dash: false, polys: [[[-94.69148,38.92736],[-94.6872,38.92728],[-94.6872,38.92673],[-94.68772,38.92665],[-94.68779,38.92587],[-94.68772,38.92534],[-94.68802,38.92477],[-94.68794,38.92424],[-94.6866,38.9243],[-94.68657,38.92199],[-94.68645,38.91944],[-94.69129,38.9195],[-94.6914,38.92164],[-94.69188,38.92268],[-94.69166,38.92303],[-94.69129,38.92355],[-94.69125,38.92453],[-94.69118,38.92477],[-94.69144,38.92587],[-94.69159,38.92604],[-94.69155,38.92734],[-94.69148,38.92736]]] },
   };
   const LEGEND = [
+    { key: "pinehurst", label: "Area of last reported sighting", swatch: "background:rgba(178,76,27,.3);border:2px solid #b24c1b" },
     { key: "grandview", label: "Where Sunday may be (Oct 12)", swatch: "background:rgba(123,79,208,.3);border:2px solid #7b4fd0" },
     { key: "creek",  label: "Indian Creek", swatch: "background:repeating-linear-gradient(90deg,#d4622a 0 6px,transparent 6px 10px);height:4px" },
     { key: "scent",  label: "Scent tracking dog routes", swatch: "background:#e0447c;height:4px;border-radius:2px" },
@@ -1039,6 +1042,9 @@ if (CONFIG.showSearchBanner) {
   // Possible sighting, Mon Oct 12 at 4:20 PM: Antioch Rd & 99th St, heading east into Pinehurst Estates (OpenStreetMap geometry)
   const PINE = [-94.68625, 38.94893];
   const PINE_HEADING = [[-94.68625,38.94893],[-94.68588,38.94893],[-94.68551,38.94896],[-94.68533,38.94901],[-94.68496,38.94914],[-94.68479,38.94923],[-94.6844,38.94948],[-94.68419,38.9496],[-94.68391,38.94972],[-94.68368,38.94978],[-94.68324,38.94984],[-94.68289,38.94983],[-94.6827,38.9498],[-94.68221,38.9497],[-94.68169,38.9496],[-94.68117,38.9495]];
+  // Area of last reported sighting: Pinehurst Estates, bounded by Antioch Rd, 99th St, Lowell Ave and 103rd St
+  const PINE_AREA = [[-94.6861,38.94893],[-94.68588,38.94893],[-94.68551,38.94896],[-94.68533,38.94901],[-94.68496,38.94914],[-94.6844,38.94948],[-94.68391,38.94972],[-94.68324,38.94984],[-94.68289,38.94983],[-94.68221,38.9497],[-94.68117,38.9495],[-94.68052,38.94938],[-94.68013,38.94938],[-94.67965,38.94946],[-94.6792,38.94964],[-94.67861,38.94983],[-94.67812,38.9499],[-94.67705,38.94991],[-94.67705,38.94225],[-94.6861,38.94225],[-94.6861,38.94893]];
+  const PINE_LABEL = [-94.68150, 38.94560];
   const SCHOOL = [-94.69900, 38.91900];
   const BRIDGE69 = [-94.70370, 38.92040];
   const HOME = [-94.67632, 38.94064];  // The Club at Indian Creek Apartment Homes (Google Maps)
@@ -1052,7 +1058,7 @@ if (CONFIG.showSearchBanner) {
     {
       key: "pinehurst", time: "Monday, October 12, 4:20 PM",
       title: "Possible sighting heading into Pinehurst Estates",
-      body: ["A driver heading south on Antioch Road reported a black Lab with a pink or red collar, matching Sunday's description, heading east on 99th Street into Pinehurst Estates.", "This is less than a mile from Sunday's home."],
+      body: ["A driver heading south on Antioch Road reported a black Lab with a pink or red collar, matching Sunday's description, heading east on 99th Street into Pinehurst Estates.", "The pulsing area is Pinehurst Estates, between Antioch Road and Lowell Avenue, from 99th Street to 103rd Street. This is less than a mile from Sunday's home."],
       sub: "If you live in or near Pinehurst Estates",
       bullets: ["Please check your back yards, side yards, and under porches and decks, and keep an eye out."],
       sighting: true,
@@ -1103,7 +1109,7 @@ if (CONFIG.showSearchBanner) {
     if (key === "all" || key === "creek") return ALL_BOUNDS;
     const b = new maplibregl.LngLatBounds();
     if (key === "scent") { SCENT.forEach((pt) => b.extend(pt)); return b.toArray(); }
-    if (key === "pinehurst") { [PINE, ...PINE_HEADING, HOME].forEach((pt) => b.extend(pt)); return b.toArray(); }
+    if (key === "pinehurst") { [PINE, ...PINE_HEADING, ...PINE_AREA, HOME].forEach((pt) => b.extend(pt)); return b.toArray(); }
     if (key === "grandview") { [...SCENT2.slice(6), ...AREAS.maybe.polys[0], ...SIGHT_HEADING].forEach((pt) => b.extend(pt)); return b.toArray(); }
     AREAS[key].polys.forEach((poly) => poly.forEach((pt) => b.extend(pt)));
     return b.toArray();
@@ -1135,7 +1141,9 @@ if (CONFIG.showSearchBanner) {
   let sCur = 0;
   let sReady = false;
 
+  let pineDim = 1;
   function emphasize(key) {
+    pineDim = key === "all" || key === "pinehurst" ? 1 : 0.4;
     for (const [k, a] of Object.entries(AREAS)) {
       const on = key === "all" || key === k || (k === "maybe" && key === "grandview");
       smap.setPaintProperty(`a-${k}-fill`, "fill-opacity", a.fill * (on ? 1 : 0.3));
@@ -1241,6 +1249,25 @@ if (CONFIG.showSearchBanner) {
     smap.addSource("sighting", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: SIGHT_HEADING } } });
     smap.addLayer({ id: "sighting-line", type: "line", source: "sighting", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 3, "line-dasharray": [1.4, 1.2] } });
     tag("sighting small", "Possible sighting: Oct 12, 6–8 AM", "r", SIGHT);
+    // Area of last reported sighting, with a slow pulse
+    smap.addSource("pinearea", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [PINE_AREA] } } });
+    smap.addLayer({ id: "pinearea-fill", type: "fill", source: "pinearea", paint: { "fill-color": "#b24c1b", "fill-opacity": 0.22 } }, "creek-halo");
+    smap.addLayer({ id: "pinearea-line", type: "line", source: "pinearea", layout: { "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 2.5 } }, "creek-halo");
+    tag("tag pinearea", "Area of last reported sighting", "b", PINE_LABEL);
+    if (reduceMotion) {
+      smap.setPaintProperty("pinearea-fill", "fill-opacity", 0.24);
+    } else {
+      const t0 = performance.now();
+      const pulse = (now) => {
+        const w = (Math.sin(((now - t0) / 1600) * Math.PI * 2) + 1) / 2;  // 0..1, 1.6 s cycle
+        smap.setPaintProperty("pinearea-fill", "fill-opacity", (0.1 + 0.25 * w) * pineDim);
+        smap.setPaintProperty("pinearea-line", "line-opacity", (0.55 + 0.45 * w) * pineDim);
+        smap.setPaintProperty("pinearea-line", "line-width", 2 + 2 * w);
+        requestAnimationFrame(pulse);
+      };
+      requestAnimationFrame(pulse);
+    }
+
     // Newest possible sighting (Oct 12, 4:20 PM): full-size, pulsing marker with direction of travel
     smap.addSource("pine", { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: PINE_HEADING } } });
     smap.addLayer({ id: "pine-halo", type: "line", source: "pine", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#fff", "line-width": 9, "line-opacity": 0.9 } });
