@@ -213,6 +213,17 @@
   .thanks p { font-size: 17.5px; line-height: 1.65; margin: 0 0 14px; max-width: 760px; }
   .thanks .signoff { margin-top: 20px; }
 
+  .h-btn { text-decoration: none; display: inline-flex; align-items: center; }
+  .party { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; background: #22201c; color: #fff; border-radius: var(--radius); padding: clamp(24px, 4vw, 40px); margin-bottom: 36px; }
+  .party-eyebrow { margin: 0 0 8px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #ffd84d; }
+  .party .sec { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.2; margin: 0 0 12px; letter-spacing: -.01em; color: #fff; }
+  .party p { margin: 0 0 18px; font-size: 17.5px; line-height: 1.6; color: #e9e4dc; max-width: 640px; }
+  .party-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--sunday); color: #fff; text-decoration: none; font-weight: 700; font-size: 18px; padding: 14px 24px; border-radius: 12px; }
+  .party-btn:hover { background: #bf5623; }
+  .party-btn:focus-visible { outline: 3px solid #ffd84d; outline-offset: 3px; }
+  .party .party-note { margin: 12px 0 0; font-size: 14px; color: #b9b2a7; }
+  .party-art { font-size: clamp(64px, 10vw, 120px); line-height: 1; transform: rotate(-8deg); }
+
   /* Latest update alert */
   .alert { background: #b24c1b; color: #fff; border-radius: 18px; padding: clamp(22px, 4vw, 36px); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(178,76,27,.25); }
   .alert-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
@@ -302,6 +313,8 @@
     .next-list { grid-template-columns: 1fr; }
     .home-hero { grid-template-columns: 1fr; gap: 24px; }
     .home-photo { max-width: 260px; }
+    .party { grid-template-columns: 1fr; }
+    .party-art { display: none; }
     html { scroll-padding-top: 104px; }
     .site-head-in { flex-wrap: wrap; gap: 6px 12px; padding: 8px 12px; }
     .brand { font-size: 16px; flex: 1; }
@@ -329,6 +342,7 @@
     <nav class="site-nav" aria-label="On this page">
       <a href="#home">Sunday is home</a>
       <a href="#thanks">Thank you</a>
+      <a href="#party">Sunday's party</a>
       <a href="#search">How the search unfolded</a>
       <a href="#journey">Sunday's escape journey</a>
     </nav>
@@ -356,7 +370,8 @@
       <h2 id="homeTitle">Sunday is home!</h2>
       <p class="home-lede">After five days, Sunday walked right through her own front door. She has a few scrapes, but otherwise she's fed, healthy, and happy to see her dad.</p>
       <div class="home-actions">
-        <button class="h-btn primary" type="button" data-share>Share the good news</button>
+        <a class="h-btn primary" href="#party">Join Sunday's party</a>
+        <button class="h-btn" type="button" data-share>Share the good news</button>
         <button class="h-btn" type="button" id="confettiBtn">Celebrate again</button>
       </div>
     </div>
@@ -373,6 +388,17 @@
     <p>To everyone in Shannon Valley, Pinehurst Estates, Indian Creek Estates, Hunter's Pointe, Rolling Woods, South Woods and beyond; to the volunteers, drone pilots and scent-dog team; to Kyle's family and friends; and to our Pawz at Play team, who never stopped looking: thank you.</p>
     <p>Sunday has been part of the Pawz at Play family for 10 years. Thanks to you, her story keeps going. We're so grateful to be part of a community like this one.</p>
     <p class="signoff">With love and gratitude,<br><strong>The Pawz at Play Team</strong></p>
+  </section>
+
+  <section class="party" id="party" aria-labelledby="partyTitle">
+    <div class="party-text">
+      <p class="party-eyebrow">Sunday's thank-you party</p>
+      <h2 class="sec" id="partyTitle">You helped bring Sunday home. Now let us thank you.</h2>
+      <p>Pawz at Play is throwing a party in Sunday's honor for everyone who joined the search. Leave your name and email, and we'll send you the details as soon as they're set.</p>
+      <a class="party-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSfExRrFO4Fz1K9by9jDuH6qr9TkwTauazUZUdGN75wr37udfA/viewform" target="_blank" rel="noopener">Count me in <span aria-hidden="true">&rarr;</span></a>
+      <p class="party-note">Opens a short Google Form. We'll only use your information to invite you to Sunday's party. We won't share it.</p>
+    </div>
+    <div class="party-art" aria-hidden="true">&#127881;</div>
   </section>
 
   <div class="banner" id="banner" hidden></div>
