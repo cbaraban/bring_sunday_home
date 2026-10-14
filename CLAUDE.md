@@ -2,6 +2,8 @@
 
 This repo is the whole website at https://www.bringsundayhome.com. It's a single static page about Sunday, a dog missing in Overland Park, KS since Friday, October 9, 2026, after she got out of Pawz at Play. GitHub Pages serves it from `main` (root), and every push goes live in about a minute.
 
+**Status: Sunday is home.** She walked through her own front door at 1:50 AM on Wednesday, October 14, 2026. The site is now a celebration and thank-you page. The top of the page has the "Sunday is home!" section (confetti on load), then the thank-you message from the Pawz at Play Team, then photos. The search map ("How the search unfolded") and the escape journey stay as the record. The contact number, reward, call buttons, "What happens next" and the lost-dog flyer have been removed. Don't add them back.
+
 Note: this repo is public, and this file can be read at bringsundayhome.com/CLAUDE.md. Keep private details out of it.
 
 ## Before you change anything

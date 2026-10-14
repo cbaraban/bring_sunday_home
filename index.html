@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Help Bring Sunday Home</title>
-<meta name="description" content="Sunday is missing in Overland Park, Kansas. $3,000 reward for her safe return. See her route, where we've searched, and how you can help. If you see her, call 913-530-7596.">
+<title>Sunday Is Home!</title>
+<meta name="description" content="After five days, Sunday is home. She walked through her own front door at 1:50 AM on Wednesday, October 14. Thank you to everyone who searched.">
 <link rel="canonical" href="https://www.bringsundayhome.com/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.bringsundayhome.com/">
-<meta property="og:title" content="Help Bring Sunday Home">
-<meta property="og:description" content="Sunday is missing in Overland Park, Kansas. $3,000 reward for her safe return. See her route, where we've searched, and how you can help. If you see her, call 913-530-7596.">
+<meta property="og:title" content="Sunday is home!">
+<meta property="og:description" content="After five days, Sunday is home. She walked through her own front door at 1:50 AM on Wednesday, October 14. Thank you to everyone who searched.">
 <meta property="og:image" content="https://www.bringsundayhome.com/sunday-photos/share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Three photos of Sunday, a black dog with a graying muzzle. $3,000 reward. Have you seen Sunday? Call 913-530-7596.">
+<meta property="og:image:alt" content="Sunday, a black dog with a graying muzzle, at home. Sunday is home! Thank you, everyone.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Help Bring Sunday Home">
-<meta name="twitter:description" content="Sunday is missing in Overland Park, Kansas. $3,000 reward for her safe return. See her route, where we've searched, and how you can help. If you see her, call 913-530-7596.">
+<meta name="twitter:title" content="Sunday is home!">
+<meta name="twitter:description" content="After five days, Sunday is home. She walked through her own front door at 1:50 AM on Wednesday, October 14. Thank you to everyone who searched.">
 <meta name="twitter:image" content="https://www.bringsundayhome.com/sunday-photos/share.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +38,7 @@
     --shadow: 0 1px 2px rgba(34,32,28,.06), 0 8px 24px rgba(34,32,28,.08);
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html, body { margin: 0; background: var(--bg); color: var(--ink); }
   body { font: 16px/1.55 Figtree, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
   .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 16px 56px; }
@@ -191,6 +192,27 @@
   .mk.home .lbl { color: var(--sunday); }
   .mk.tag.red .lbl { background: #cf3440; color: #fff; }
 
+  /* Sunday is home */
+  #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+  .home-hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; background: linear-gradient(135deg, #fff1e3 0%, #ffe3c7 55%, #ffd6a8 100%); border-radius: 22px; padding: clamp(24px, 4vw, 44px); margin-bottom: 20px; box-shadow: 0 12px 34px rgba(212,98,42,.18); overflow: hidden; }
+  .home-eyebrow { margin: 0 0 8px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #b24c1b; }
+  .home-hero h2 { font-size: clamp(44px, 8vw, 84px); line-height: 1; letter-spacing: -.03em; margin: 0 0 16px; color: #22201c; animation: pop .9s cubic-bezier(.2,1.4,.4,1) both; }
+  .home-lede { font-size: clamp(18px, 2.2vw, 22px); line-height: 1.45; margin: 0 0 22px; color: #3a352f; max-width: 560px; }
+  .home-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .h-btn { font: inherit; font-weight: 700; font-size: 16px; padding: 13px 20px; border-radius: 12px; border: 2px solid #22201c; background: transparent; color: #22201c; cursor: pointer; }
+  .h-btn.primary { background: var(--sunday); border-color: var(--sunday); color: #fff; }
+  .h-btn:hover { filter: brightness(.95); }
+  .h-btn:focus-visible { outline: 3px solid #f0b48f; outline-offset: 3px; }
+  .home-photo { margin: 0; justify-self: center; background: #fff; padding: 12px 12px 10px; border-radius: 6px; box-shadow: 0 14px 30px rgba(0,0,0,.18); transform: rotate(2.5deg); animation: drop 1s .15s cubic-bezier(.2,1.2,.4,1) both; max-width: 340px; }
+  .home-photo img { display: block; width: 100%; height: auto; border-radius: 3px; }
+  .home-photo figcaption { text-align: center; font-weight: 600; color: var(--muted); padding-top: 8px; font-size: 15px; }
+  @keyframes pop { 0% { transform: scale(.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes drop { 0% { transform: translateY(-30px) rotate(-6deg); opacity: 0; } 100% { transform: translateY(0) rotate(2.5deg); opacity: 1; } }
+  .thanks { background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius); padding: clamp(22px, 4vw, 40px); margin-bottom: 36px; }
+  .thanks .sec { font-size: clamp(24px, 3.4vw, 30px); line-height: 1.2; margin: 0 0 14px; letter-spacing: -.01em; }
+  .thanks p { font-size: 17.5px; line-height: 1.65; margin: 0 0 14px; max-width: 760px; }
+  .thanks .signoff { margin-top: 20px; }
+
   /* Latest update alert */
   .alert { background: #b24c1b; color: #fff; border-radius: 18px; padding: clamp(22px, 4vw, 36px); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(178,76,27,.25); }
   .alert-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
@@ -278,6 +300,8 @@
     .call-fab { left: 12px; right: 12px; bottom: 12px; justify-content: center; }
     .call-fab .num { display: none; }
     .next-list { grid-template-columns: 1fr; }
+    .home-hero { grid-template-columns: 1fr; gap: 24px; }
+    .home-photo { max-width: 260px; }
     html { scroll-padding-top: 104px; }
     .site-head-in { flex-wrap: wrap; gap: 6px 12px; padding: 8px 12px; }
     .brand { font-size: 16px; flex: 1; }
@@ -292,24 +316,27 @@
   @media (prefers-reduced-motion: reduce) {
     .mk.last .ring, .mk.sighting .ring { animation: none; opacity: 0; }
     .alert .pulse { animation: none; }
+    .home-hero h2, .home-photo { animation: none; }
     .plan .fp-move, .plan .fade { transition: none; }
   }
 </style>
 </head>
 <body id="top">
+<canvas id="confetti" aria-hidden="true"></canvas>
 <header class="site-head">
   <div class="site-head-in">
     <a class="brand" href="#top">Bring Sunday Home</a>
     <nav class="site-nav" aria-label="On this page">
-      <a href="#search">Latest information</a>
-      <a href="#next">What happens next</a>
+      <a href="#home">Sunday is home</a>
+      <a href="#thanks">Thank you</a>
+      <a href="#search">How the search unfolded</a>
       <a href="#journey">Sunday's escape journey</a>
     </nav>
     <a class="head-call" id="headCall" hidden>Report a sighting</a>
   </div>
 </header>
 <div class="wrap">
-  <h1 class="visually-hidden">Help bring Sunday home</h1>
+  <h1 class="visually-hidden">Sunday is home</h1>
 
   <section class="alert" id="alert" aria-labelledby="alertTitle" hidden>
     <p class="alert-eyebrow"><span class="pulse" aria-hidden="true"></span><span>Update</span><span id="alertDate"></span><span class="reward-pill" id="alertReward" hidden></span></p>
@@ -323,27 +350,45 @@
     <div class="earlier" id="alertEarlier" hidden></div>
   </section>
 
+  <section class="home-hero" id="home" aria-labelledby="homeTitle">
+    <div class="home-text">
+      <p class="home-eyebrow">Wednesday, October 14, 1:50 AM</p>
+      <h2 id="homeTitle">Sunday is home!</h2>
+      <p class="home-lede">After five days, Sunday walked right through her own front door. She has a few scrapes, but otherwise she's fed, healthy, and happy to see her dad.</p>
+      <div class="home-actions">
+        <button class="h-btn primary" type="button" data-share>Share the good news</button>
+        <button class="h-btn" type="button" id="confettiBtn">Celebrate again</button>
+      </div>
+    </div>
+    <figure class="home-photo">
+      <img src="sunday-photos/sunday-home.jpg" alt="Sunday at home, looking up at the camera from the kitchen floor" width="1050" height="1400">
+      <figcaption>Home, safe and sound</figcaption>
+    </figure>
+  </section>
+
+  <section class="thanks" id="thanks" aria-labelledby="thanksTitle">
+    <h2 class="sec" id="thanksTitle">Thank you for showing up for Sunday</h2>
+    <p>After five days, Sunday is home. At 1:50 AM on Wednesday, October 14, with the rain coming down, she walked right through her own front door while Kyle was asleep. She has a few scrapes, but otherwise she's fed, healthy, and happy to see her dad.</p>
+    <p>We can't thank you enough. For five days, so many of you showed up for a dog you may never have met. You walked the creek and the woods. You checked your yards, sheds and porches. You called in every possible sighting, flew drones through the night, brought out scent dogs, printed flyers and shared Sunday's story again and again. Neighbors talked to neighbors, and strangers became search partners.</p>
+    <p>To everyone in Shannon Valley, Pinehurst Estates, Indian Creek Estates, Hunter's Pointe, Rolling Woods, South Woods and beyond; to the volunteers, drone pilots and scent-dog team; to Kyle's family and friends; and to our Pawz at Play team, who never stopped looking: thank you.</p>
+    <p>Sunday has been part of the Pawz at Play family for 10 years. Thanks to you, her story keeps going. We're so grateful to be part of a community like this one.</p>
+    <p class="signoff">With love and gratitude,<br><strong>The Pawz at Play Team</strong></p>
+  </section>
+
   <div class="banner" id="banner" hidden></div>
 
   <section class="meet" aria-labelledby="meetTitle">
     <div>
       <h2 id="meetTitle">This is Sunday</h2>
       <p>Sunday has a black coat, a graying muzzle and brown eyes. Tap a photo to see it larger.</p>
-      <div class="flyer">
-        <a class="flyer-btn" href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">
-          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
-          Download the printable flyer
-        </a>
-        <p class="flyer-sub">PDF, 8.5 &times; 11 in. Print it, post it, send it, or hand it out.</p>
-      </div>
     </div>
     <div class="gallery" id="gallery"></div>
   </section>
 
   <section class="section-search" id="search" aria-labelledby="searchTitle">
     <span class="updated" id="updatedTag"></span>
-    <h2 class="sec" id="searchTitle">Where the search stands</h2>
-    <p class="lede">The map opens on the newest update. Tap through to see each sighting and search area. Searched areas don't mean Sunday isn't there.</p>
+    <h2 class="sec" id="searchTitle">How the search unfolded</h2>
+    <p class="lede">For five days, people searched creeks, woods, yards and neighborhoods for Sunday. Tap through the map to see each sighting, scent-dog trail and searched area, newest first.</p>
 
     <div class="stage">
       <div id="searchMap" class="map-el" role="img" aria-label="Map of Indian Creek and the surrounding neighborhoods in Overland Park, Kansas, showing which areas have been searched for Sunday. The same information is in the text summary below the map."></div>
@@ -367,46 +412,6 @@
     </details>
   </section>
 
-  <section class="next" id="next" aria-labelledby="nextTitle">
-    <h2 class="sec" id="nextTitle">What happens next</h2>
-    <ol class="next-list">
-      <li>
-        <span class="n" aria-hidden="true">1</span>
-        <div>
-          <p class="when">A call to neighbors</p>
-          <h3>Keep an eye out and check your yards</h3>
-          <p>If you live in or near Pinehurst Estates, near 99th Street and Antioch Road, please check your yards and keep an eye out. If you're out in the evening, especially between Grandview Drive and Antioch Road from College Boulevard to 116th Terrace, please keep an eye out. We're also asking neighbors in Shannon Valley Estates, Indian Creek Estates, Hunter's Pointe, Rolling Woods, and South Woods to check their back yards, side yards, and under porches and decks.</p>
-        </div>
-      </li>
-      <li>
-        <span class="n" aria-hidden="true">2</span>
-        <div>
-          <p class="when">$3,000 reward</p>
-          <h3>Reward signs along College Boulevard</h3>
-          <p>Pawz at Play is offering a $3,000 reward for Sunday's safe return. We're reprinting signs to post along College Boulevard.</p>
-        </div>
-      </li>
-      <li>
-        <span class="n" aria-hidden="true">3</span>
-        <div>
-          <p class="when">Spreading the word</p>
-          <h3>Ads and flyers</h3>
-          <p>We're starting a Facebook and Instagram ad campaign about Sunday and the reward, and handing out tri-fold flyers in Shannon Valley and surrounding neighborhoods.</p>
-          <p class="card-link"><a href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">Download the printable flyer (PDF) &darr;</a></p>
-        </div>
-      </li>
-      <li>
-        <span class="n" aria-hidden="true">4</span>
-        <div>
-          <p class="when">Every day</p>
-          <h3>We won't stop looking</h3>
-          <p>We will keep searching for Sunday until she is found.</p>
-        </div>
-      </li>
-    </ol>
-    <div class="next-cta" id="nextCta" hidden></div>
-    <p class="journey-link">Want to know how this started? <a href="#journey">See Sunday's escape journey &darr;</a></p>
-  </section>
 
   <section class="journey" id="journey" aria-labelledby="journeyTitle">
   <div class="sec-head">
@@ -445,10 +450,8 @@
     <div>
       <p class="foot-updated" id="footUpdated"></p>
       <p>Pawz at Play &middot; 11200 Mastin Street, Overland Park, KS 66210</p>
-      <p>Report a sighting: <span id="footPhone"></span></p>
     </div>
     <div class="foot-actions">
-      <a class="share-btn" href="sunday-flyer.pdf" download="Sunday-lost-dog-flyer.pdf">Download flyer (PDF)</a>
       <button class="share-btn" type="button" data-share>Share this page</button>
       <a class="top-link" href="#top">Back to top &uarr;</a>
     </div>
@@ -553,22 +556,14 @@
    SETTINGS: edit these before publishing.
    ------------------------------------------------------------------ */
 const CONFIG = {
-  showSearchBanner: true,      // set to false once Sunday is home
-  sightingsPhone: "913-530-7596",  // blank shows a placeholder
+  showSearchBanner: false,     // Sunday is home (Wed, Oct 14, 1:50 AM): search banner, call buttons and call-outs off
+  sightingsPhone: "",          // contact removed now that Sunday is home
   dogPhotoUrl: "",             // optional photo of Sunday for the banner
   searchUpdated: "October 13, 2026",  // shown on "Where the search stands"
-  lastUpdated: "Tuesday, October 13, 2026",  // shown in the footer
-  reward: "$3,000 reward for Sunday's safe return",  // blank hides the reward everywhere
+  lastUpdated: "Wednesday, October 14, 2026",  // shown in the footer
+  reward: "",                  // blank hides the reward everywhere
   // Big alert card at the top of the page. Set to null to hide it.
-  latestUpdate: {
-    date: "Monday, October 12, 4:20 PM",
-    title: "Possible sighting on 99th Street, heading into Pinehurst Estates",
-    body: [
-      "At 4:20 PM, a driver heading south on Antioch Road called to report a black Lab with a pink or red collar, matching Sunday's description, heading east on 99th Street into Pinehurst Estates.",
-      "If you live in or near Pinehurst Estates, please check your yards, under porches and decks, and keep an eye out. If you see Sunday, call us right away.",
-    ],
-    mapStep: "pinehurst",  // "See it on the map" opens this step of the search map
-  },
+  latestUpdate: null,  // the "Sunday is home" section replaces the update card
   // Shown under the top card as "Earlier updates", newest first. Always use the actual date (e.g. "Monday, October 12"),
   // never "today" or "yesterday", since the page stays up for days.
   earlierUpdates: [
@@ -578,6 +573,7 @@ const CONFIG = {
 
 // Photos of Sunday (files in the sunday-photos folder next to this page)
 const PHOTOS = [
+  { src: "sunday-photos/sunday-home.jpg", alt: "Sunday at home on October 14, looking up at the camera from the kitchen floor", pos: "55% 40%" },
   { src: "sunday-photos/sunday-standing.jpg", alt: "Illustration of Sunday standing on grass: black coat, graying muzzle, red collar", pos: "60% 35%",
     note: "Illustration based on Sunday, not a photo" },
   { src: "sunday-photos/sunday-face.jpg",  alt: "Close-up of Sunday's face: black fur, brown eyes and a graying chin", pos: "50% 40%" },
@@ -898,7 +894,7 @@ function renderCard(i) {
   const sighting = s.sighting && CONFIG.showSearchBanner
     ? `<div class="callout"><strong>If you see Sunday</strong>Please don't chase or call out to her. Note the time and place, and call ${phoneHTML()}.</div>`
     : "";
-  const searchLink = s.searchLink ? `<p><a href="#search" class="search-link" id="searchLink">See the latest information &uarr;</a></p>` : "";
+  const searchLink = s.searchLink ? `<p><a href="#search" class="search-link" id="searchLink">See how the search unfolded &uarr;</a></p>` : "";
   $("cardBody").innerHTML = `<p class="eyebrow">${esc(s.time)}</p><h2>${esc(s.title)}</h2>${s.body.map((p) => `<p>${esc(p)}</p>`).join("")}${searchLink}${unseenNote}${more}${sighting}`;
   if (s.searchLink) $("searchLink").addEventListener("click", () => window.focusSearchStep && window.focusSearchStep("grandview"));
   if (s.more) $("moreBtn").addEventListener("click", openHow);
@@ -1072,6 +1068,44 @@ $("howNext").addEventListener("click", () => {
 $("howDialog").querySelector("[data-close]").addEventListener("click", () => $("howDialog").close());
 $("howDialog").addEventListener("click", (e) => { if (e.target === $("howDialog")) $("howDialog").close(); });
 
+/* ---------------- Confetti: Sunday is home ---------------- */
+(() => {
+  const cv = $("confetti");
+  const ctx = cv.getContext("2d");
+  const COLORS = ["#d4622a", "#ffd84d", "#7b4fd0", "#2e8b57", "#e0447c", "#2b7bb9", "#ffffff"];
+  let pieces = [];
+  let running = false;
+  const size = () => { const r = devicePixelRatio || 1; cv.width = innerWidth * r; cv.height = innerHeight * r; ctx.setTransform(r, 0, 0, r, 0, 0); };
+  function burst(n = 180) {
+    size();
+    for (let i = 0; i < n; i++) {
+      const fromLeft = i % 2 === 0;
+      pieces.push({
+        x: fromLeft ? -10 : innerWidth + 10, y: innerHeight * (0.35 + Math.random() * 0.3),
+        vx: (fromLeft ? 1 : -1) * (4 + Math.random() * 9), vy: -(7 + Math.random() * 9),
+        w: 6 + Math.random() * 7, h: 8 + Math.random() * 10, rot: Math.random() * 6.3, vr: (Math.random() - .5) * .35,
+        c: COLORS[(Math.random() * COLORS.length) | 0], life: 0,
+      });
+    }
+    if (!running) { running = true; requestAnimationFrame(tick); }
+  }
+  function tick() {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    pieces = pieces.filter((p) => p.y < innerHeight + 40 && p.life < 420);
+    for (const p of pieces) {
+      p.life++; p.vy += 0.22; p.vx *= 0.985; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.life / 8)));
+      ctx.restore();
+    }
+    if (pieces.length) requestAnimationFrame(tick);
+    else { running = false; ctx.clearRect(0, 0, innerWidth, innerHeight); }
+  }
+  addEventListener("resize", () => running && size());
+  if (!reduceMotion) setTimeout(() => { burst(); setTimeout(() => burst(120), 900); }, 400);
+  $("confettiBtn").addEventListener("click", () => burst(reduceMotion ? 60 : 200));
+})();
+
 /* ---------------- Header call button, footer, share ---------------- */
 if (CONFIG.sightingsPhone) {
   $("headCall").hidden = false;
@@ -1079,10 +1113,9 @@ if (CONFIG.sightingsPhone) {
   $("headCall").textContent = `Report a sighting \u00b7 ${CONFIG.sightingsPhone}`;
 }
 $("footUpdated").textContent = `Last updated ${CONFIG.lastUpdated}`;
-$("footPhone").innerHTML = phoneHTML();
 const SHARE = {
-  title: "Help Bring Sunday Home",
-  text: CONFIG.reward ? `Sunday is missing in Overland Park, KS. ${CONFIG.reward}.` : "Sunday is missing in Overland Park, KS.",
+  title: "Sunday is home!",
+  text: "After five days, Sunday is home! Thank you to everyone who searched.",
   url: "https://www.bringsundayhome.com/",
 };
 document.querySelectorAll("[data-share]").forEach((btn) => btn.addEventListener("click", async () => {
@@ -1164,27 +1197,21 @@ if (CONFIG.showSearchBanner) {
       key: "pinehurst", time: "Monday, October 12, 4:20 PM",
       title: "Possible sighting heading into Pinehurst Estates",
       body: ["A driver heading south on Antioch Road reported a black Lab with a pink or red collar, matching Sunday's description, heading east on 99th Street into Pinehurst Estates.", "The pulsing area is Pinehurst Estates, between Antioch Road and Lowell Avenue, from 99th Street to 103rd Street. This is less than a mile from Sunday's home."],
-      sub: "If you live in or near Pinehurst Estates",
-      bullets: ["Please check your back yards, side yards, and under porches and decks, and keep an eye out."],
-      sighting: true,
     },
     {
       key: "grandview", time: "Monday, October 12",
       title: "Scent dogs track Sunday east to Grandview Drive",
-      body: ["Three scent dogs followed Sunday's scent from Pawz at Play to the DoubleTree hotel, up to Grant Drive, then east along College Boulevard to Grandview Drive, where the scent stops.", "The purple area shows where Sunday may be, based on what the scent dogs found. This is a possibility, not a certainty. Someone may also have picked her up.", "There was also a possible sighting between 6:00 and 8:00 AM on October 12, at Grant Drive and 116th Terrace, heading west."],
-      sub: "Out walking in the evening?",
-      bullets: ["Please keep an eye out between Grandview Drive and Antioch Road, from College Boulevard to 116th Terrace."],
-      sighting: true,
+      body: ["Three scent dogs followed Sunday's scent from Pawz at Play to the DoubleTree hotel, up to Grant Drive, then east along College Boulevard to Grandview Drive, where the scent stops.", "The purple area shows where Sunday may have been, based on what the scent dogs found.", "There was also a possible sighting between 6:00 and 8:00 AM on October 12, at Grant Drive and 116th Terrace, heading west."],
     },
     {
-      key: "all", time: `As of ${CONFIG.searchUpdated}`,
-      title: "Where we've searched so far",
-      body: ["Pawz at Play staff, volunteers, Sunday's owner and friends have been searching since Friday morning, October 9. Each shaded area has already been searched.", "That doesn't mean Sunday isn't there. It just means we've had people looking in the area.", "Tap Next to see each area."],
+      key: "all", time: "October 9 to October 14",
+      title: "Where we searched",
+      body: ["Pawz at Play staff, volunteers, Sunday's owner and friends searched from Friday morning, October 9, until Sunday came home on Wednesday, October 14. Each shaded area was searched.", "Tap Next to see each area."],
     },
     {
       key: "creek", time: "A source of water",
-      title: "Indian Creek: a place Sunday may go to drink",
-      body: ["Indian Creek, marked in orange, is a good source of water. Sunday may come to the creek to quench her thirst, so it's worth keeping an eye on the creek banks and trail as you walk.", "Sunday lives near 103rd Street and Lowell Avenue, northeast along the same creek."],
+      title: "Indian Creek: a source of water",
+      body: ["Indian Creek, marked in orange, was a good source of water, so searchers kept a close eye on the creek banks and trail.", "Sunday lives near 103rd Street and Lowell Avenue, northeast along the same creek."],
     },
     {
       key: "green", time: "Searched on foot",
@@ -1317,7 +1344,7 @@ if (CONFIG.showSearchBanner) {
   $("sPrev").addEventListener("click", () => sCur > 0 && sGoTo(sCur - 1));
   $("sNext").addEventListener("click", () => sGoTo(sCur === SSTEPS.length - 1 ? 0 : sCur + 1));
   $("sFit").addEventListener("click", () => smap.fitBounds(ALL_BOUNDS, { padding: 30, duration: reduceMotion ? 0 : 1000 }));
-  $("updatedTag").textContent = `Updated ${CONFIG.searchUpdated}`;
+  $("updatedTag").textContent = "Search ended Wednesday, October 14, 2026";
   $("searchText").innerHTML = SSTEPS.filter((st) => st.key !== "all").map((s) =>
     `<p><b>${esc(s.title)}.</b> ${[...(s.body || []), ...(s.bullets || [])].map(esc).join(" ")}</p>`).join("");
   renderS(0);
@@ -1364,7 +1391,7 @@ if (CONFIG.showSearchBanner) {
     smap.addLayer({ id: "pinearea-fill", type: "fill", source: "pinearea", paint: { "fill-color": "#b24c1b", "fill-opacity": 0.22 } }, "creek-halo");
     smap.addLayer({ id: "pinearea-line", type: "line", source: "pinearea", layout: { "line-join": "round" }, paint: { "line-color": "#b24c1b", "line-width": 2.5 } }, "creek-halo");
     tag("tag pinearea", "Area of last reported sighting", "b", PINE_LABEL);
-    if (reduceMotion) {
+    if (reduceMotion || !CONFIG.showSearchBanner) {  // search is over: keep the area still
       smap.setPaintProperty("pinearea-fill", "fill-opacity", 0.24);
     } else {
       const t0 = performance.now();
